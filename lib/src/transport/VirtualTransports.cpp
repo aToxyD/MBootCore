@@ -45,7 +45,7 @@ bool VirtualUsbTransport::shouldCorrupt() {
 }
 void VirtualUsbTransport::maybeCorrupt(ByteBuffer& data) {
     if (!shouldCorrupt() || data.empty()) return;
-    data[std::uniform_int_distribution<size_t>(0, data.size()-1)(m_rng)] = std::uniform_int_distribution<uint8_t>(0,255)(m_rng);
+    data[std::uniform_int_distribution<size_t>(0, data.size()-1)(m_rng)] = static_cast<uint8_t>(std::uniform_int_distribution<int>(0,255)(m_rng));
 }
 bool VirtualUsbTransport::shouldDuplicate() {
     if (!m_virtConfig.simulateDuplication) return false;
