@@ -1,5 +1,7 @@
 #include "mbootcore/elf/VirtualProgrammer.hpp"
 
+#include <algorithm>
+
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -103,7 +105,7 @@ Result<void> VirtualProgrammer::transferImage() {
             return ErrorCode::Cancelled;
         }
 
-        size_t chunk = std::min(total - transferred, m_transferChunkSize);
+        size_t chunk = (std::min)(total - transferred, m_transferChunkSize);
         transferred += chunk;
 
         updateProgress(ProgrammerState::Transferring, transferred, total);
