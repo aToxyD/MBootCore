@@ -1,11 +1,23 @@
 #include "mbootcore/gpt/Guid.hpp"
-#include <cstdio>
 #include <cstring>
 #include <cctype>
 #include <algorithm>
+#include <charconv>
 
 namespace mbootcore {
 namespace gpt {
+
+namespace {
+
+bool parseHex(const char*& p, const char* end, unsigned int width, uint32_t& out) {
+    if (static_cast<size_t>(end - p) < width) return false;
+    auto [ptr, ec] = std::from_chars(p, p + width, out, 16);
+    if (ec != std::errc{}) return false;
+    p = ptr;
+    return true;
+}
+
+} // anonymous namespace
 
 const Guid Guid::Null{};
 
@@ -17,23 +29,38 @@ Guid Guid::fromString(std::string_view s) {
     while (!trimmed.empty() && (trimmed.back() == '}' || trimmed.back() == ')'))
         trimmed.remove_suffix(1);
     if (trimmed.size() < 36) return g;
+    const char* p = trimmed.data();
+    const char* end = p + trimmed.size();
     unsigned int d1, d2, d3;
     unsigned int d4a, d4b, d4c, d4d, d4e, d4f, d4g, d4h;
-    int n = std::sscanf(trimmed.data(),
-        "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-        &d1, &d2, &d3,
-        &d4a, &d4b, &d4c, &d4d, &d4e, &d4f, &d4g, &d4h);
-    if (n == 11) {
-        g.data1 = static_cast<uint32_t>(d1);
-        g.data2 = static_cast<uint16_t>(d2);
-        g.data3 = static_cast<uint16_t>(d3);
-        g.data4 = {
-            static_cast<uint8_t>(d4a), static_cast<uint8_t>(d4b),
-            static_cast<uint8_t>(d4c), static_cast<uint8_t>(d4d),
-            static_cast<uint8_t>(d4e), static_cast<uint8_t>(d4f),
-            static_cast<uint8_t>(d4g), static_cast<uint8_t>(d4h)
-        };
-    }
+    if (!parseHex(p, end, 8, d1)) return g;
+    if (*p != '-') return g;
+    ++p;
+    if (!parseHex(p, end, 4, d2)) return g;
+    if (*p != '-') return g;
+    ++p;
+    if (!parseHex(p, end, 4, d3)) return g;
+    if (*p != '-') return g;
+    ++p;
+    if (!parseHex(p, end, 2, d4a)) return g;
+    if (!parseHex(p, end, 2, d4b)) return g;
+    if (*p != '-') return g;
+    ++p;
+    if (!parseHex(p, end, 2, d4c)) return g;
+    if (!parseHex(p, end, 2, d4d)) return g;
+    if (!parseHex(p, end, 2, d4e)) return g;
+    if (!parseHex(p, end, 2, d4f)) return g;
+    if (!parseHex(p, end, 2, d4g)) return g;
+    if (!parseHex(p, end, 2, d4h)) return g;
+    g.data1 = static_cast<uint32_t>(d1);
+    g.data2 = static_cast<uint16_t>(d2);
+    g.data3 = static_cast<uint16_t>(d3);
+    g.data4 = {
+        static_cast<uint8_t>(d4a), static_cast<uint8_t>(d4b),
+        static_cast<uint8_t>(d4c), static_cast<uint8_t>(d4d),
+        static_cast<uint8_t>(d4e), static_cast<uint8_t>(d4f),
+        static_cast<uint8_t>(d4g), static_cast<uint8_t>(d4h)
+    };
     return g;
 }
 

@@ -12,6 +12,21 @@
 namespace mbootcore {
 namespace sdk {
 
+namespace {
+
+std::string safeGetenv(const char* name) {
+#ifdef _WIN32
+    char buf[1024];
+    DWORD len = ::GetEnvironmentVariableA(name, buf, sizeof(buf));
+    return (len > 0 && len < sizeof(buf)) ? std::string(buf, len) : std::string();
+#else
+    const char* val = std::getenv(name);
+    return val ? std::string(val) : std::string();
+#endif
+}
+
+} // anonymous namespace
+
 // IMPORTANT:
 // All commands passed to execCommand() must be compile-time string
 // literals. Never construct shell commands from user input,
@@ -45,7 +60,10 @@ EnvironmentChecker::EnvironmentReport EnvironmentChecker::check() const {
     OSVERSIONINFOA osvi;
     ZeroMemory(&osvi, sizeof(osvi));
     osvi.dwOSVersionInfoSize = sizeof(osvi);
+#pragma warning(push)
+#pragma warning(disable:4996)
     if (GetVersionExA(&osvi)) {
+#pragma warning(pop)
         report.osVersion = std::to_string(osvi.dwMajorVersion) + "." + std::to_string(osvi.dwMinorVersion);
     } else {
         report.osVersion = "unknown";
@@ -146,19 +164,19 @@ bool EnvironmentChecker::hasCompiler() const {
 std::vector<std::string> EnvironmentChecker::findSDKPaths() const {
     std::vector<std::string> paths;
 
-    const char* sdkDir = std::getenv("MBOOTCORE_SDK_DIR");
-    if (sdkDir) {
+    std::string sdkDir = safeGetenv("MBOOTCORE_SDK_DIR");
+    if (!sdkDir.empty()) {
         paths.push_back(sdkDir);
     }
 
 #ifdef _WIN32
-    const char* programFiles = std::getenv("ProgramFiles");
-    if (programFiles) {
-        paths.push_back(std::string(programFiles) + "\\MBootCore");
+    std::string programFiles = safeGetenv("ProgramFiles");
+    if (!programFiles.empty()) {
+        paths.push_back(programFiles + "\\MBootCore");
     }
-    const char* localAppData = std::getenv("LOCALAPPDATA");
-    if (localAppData) {
-        paths.push_back(std::string(localAppData) + "\\MBootCore");
+    std::string localAppData = safeGetenv("LOCALAPPDATA");
+    if (!localAppData.empty()) {
+        paths.push_back(localAppData + "\\MBootCore");
     }
 #else
     paths.push_back("/usr/local/share/mbootcore");

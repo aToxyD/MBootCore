@@ -12,6 +12,21 @@
 namespace mbootcore {
 namespace sdk {
 
+namespace {
+
+std::string safeGetenv(const char* name) {
+#ifdef _WIN32
+    char buf[1024];
+    DWORD len = ::GetEnvironmentVariableA(name, buf, sizeof(buf));
+    return (len > 0 && len < sizeof(buf)) ? std::string(buf, len) : std::string();
+#else
+    const char* val = std::getenv(name);
+    return val ? std::string(val) : std::string();
+#endif
+}
+
+} // anonymous namespace
+
 SDKDoctor::SDKDoctor() = default;
 
 SDKDoctor::DoctorReport SDKDoctor::runAllChecks() {
@@ -163,8 +178,8 @@ SDKDoctor::DiagnosticResult SDKDoctor::checkEnvironment() {
     result.message = "Environment variables checked";
 
     auto checkEnv = [&](const char* var) {
-        const char* val = std::getenv(var);
-        if (val) {
+        std::string val = safeGetenv(var);
+        if (!val.empty()) {
             result.details.push_back(std::string(var) + " = " + val);
         } else {
             result.details.push_back(std::string(var) + " = (not set)");

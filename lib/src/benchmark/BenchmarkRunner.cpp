@@ -73,8 +73,14 @@ Result<BenchmarkReport> BenchmarkRunner::report() const {
     report.suite = "MBootCore Benchmark Suite";
     auto now = std::chrono::system_clock::now();
     auto tt = std::chrono::system_clock::to_time_t(now);
+    struct tm tm_buf{};
+#if defined(_WIN32)
+    gmtime_s(&tm_buf, &tt);
+#else
+    gmtime_r(&tt, &tm_buf);
+#endif
     std::ostringstream ss;
-    ss << std::put_time(std::gmtime(&tt), "%Y-%m-%dT%H:%M:%SZ");
+    ss << std::put_time(&tm_buf, "%Y-%m-%dT%H:%M:%SZ");
     report.timestamp = ss.str();
     report.results = m_impl->results;
 

@@ -2,6 +2,7 @@
 #include "mbootcore/domain/Error.hpp"
 
 #include "SafeParser.hpp"
+#include <charconv>
 
 #include <algorithm>
 #include <array>
@@ -45,8 +46,20 @@ const std::unordered_set<std::string> kManifestSchemaKeys = {
 bool versionStringToParts(const std::string& ver, uint32_t& major, uint32_t& minor, uint32_t& patch) {
     major = 0; minor = 0; patch = 0;
     if (ver.empty()) return false;
-    int parsed = std::sscanf(ver.c_str(), "%u.%u.%u", &major, &minor, &patch);
-    return parsed >= 1;
+    const char* first = ver.data();
+    const char* last = ver.data() + ver.size();
+    const char* p = first;
+    auto [ptr1, ec1] = std::from_chars(p, last, major);
+    if (ec1 != std::errc{}) return false;
+    p = ptr1;
+    if (p < last && *p == '.') ++p;
+    auto [ptr2, ec2] = std::from_chars(p, last, minor);
+    if (ec2 != std::errc{}) return true;
+    p = ptr2;
+    if (p < last && *p == '.') ++p;
+    auto [ptr3, ec3] = std::from_chars(p, last, patch);
+    (void)ptr3; (void)ec3;
+    return true;
 }
 
 } // anonymous namespace

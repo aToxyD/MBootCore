@@ -11,6 +11,24 @@
 #include <thread>
 #include <chrono>
 #include <cstdlib>
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+namespace {
+
+std::string safeGetenv(const char* name) {
+#ifdef _WIN32
+    char buf[1024];
+    DWORD len = ::GetEnvironmentVariableA(name, buf, sizeof(buf));
+    return (len > 0 && len < sizeof(buf)) ? std::string(buf, len) : std::string();
+#else
+    const char* val = std::getenv(name);
+    return val ? std::string(val) : std::string();
+#endif
+}
+
+} // anonymous namespace
 
 namespace mboot {
 namespace cli {
@@ -30,13 +48,11 @@ CliApplication::~CliApplication() {
 }
 
 std::string CliApplication::envConfig() const {
-    const char* val = std::getenv("MBOOT_CONFIG");
-    return val ? std::string(val) : std::string();
+    return safeGetenv("MBOOT_CONFIG");
 }
 
 std::string CliApplication::envConfigFile() const {
-    const char* val = std::getenv("MBOOT_CONFIG_FILE");
-    return val ? std::string(val) : std::string();
+    return safeGetenv("MBOOT_CONFIG_FILE");
 }
 
 void CliApplication::setupCallbacks() {

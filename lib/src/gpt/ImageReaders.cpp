@@ -1,5 +1,5 @@
 #include "mbootcore/gpt/ImageReaders.hpp"
-#include <cstdio>
+#include <fstream>
 #include <vector>
 
 namespace mbootcore {
@@ -9,20 +9,13 @@ namespace gpt {
 
 Result<void> RawImageReader::open(const std::string& path) {
     (void)close();
-    FILE* f = std::fopen(path.c_str(), "rb");
-    if (!f) {
+    std::ifstream ifs(path, std::ios::binary | std::ios::ate);
+    if (!ifs.is_open()) {
         return ErrorCode::InvalidArgument;
     }
-    std::fseek(f, 0, SEEK_END);
-    long sz = std::ftell(f);
-    if (sz < 0) {
-        std::fclose(f);
-        return ErrorCode::InvalidArgument;
-    }
-    m_size = static_cast<uint64_t>(sz);
+    m_size = static_cast<uint64_t>(ifs.tellg());
     m_path = path;
     m_open = true;
-    std::fclose(f);
     return {};
 }
 
@@ -49,19 +42,19 @@ Result<ByteBuffer> RawImageReader::read(uint64_t offset, size_t size) {
     if (!m_open) {
         return ErrorCode::InvalidArgument;
     }
-    FILE* f = std::fopen(m_path.c_str(), "rb");
-    if (!f) {
+    std::ifstream ifs(m_path, std::ios::binary);
+    if (!ifs.is_open()) {
         return ErrorCode::InvalidArgument;
     }
-    if (std::fseek(f, static_cast<long>(offset), SEEK_SET) != 0) {
-        std::fclose(f);
+    ifs.seekg(static_cast<std::streamoff>(offset));
+    if (ifs.fail()) {
         return ErrorCode::InvalidArgument;
     }
     ByteBuffer buf(size);
-    size_t readBytes = std::fread(buf.data(), 1, size, f);
-    std::fclose(f);
-    if (readBytes < size) {
-        buf.resize(readBytes);
+    ifs.read(reinterpret_cast<char*>(buf.data()), static_cast<std::streamsize>(size));
+    auto bytesRead = ifs.gcount();
+    if (bytesRead < static_cast<std::streamsize>(size)) {
+        buf.resize(static_cast<size_t>(bytesRead));
     }
     return buf;
 }
@@ -74,20 +67,13 @@ Result<ByteBuffer> RawImageReader::readAll() {
 
 Result<void> BinaryImageReader::open(const std::string& path) {
     (void)close();
-    FILE* f = std::fopen(path.c_str(), "rb");
-    if (!f) {
+    std::ifstream ifs(path, std::ios::binary | std::ios::ate);
+    if (!ifs.is_open()) {
         return ErrorCode::InvalidArgument;
     }
-    std::fseek(f, 0, SEEK_END);
-    long sz = std::ftell(f);
-    if (sz < 0) {
-        std::fclose(f);
-        return ErrorCode::InvalidArgument;
-    }
-    m_size = static_cast<uint64_t>(sz);
+    m_size = static_cast<uint64_t>(ifs.tellg());
     m_path = path;
     m_open = true;
-    std::fclose(f);
     return {};
 }
 
@@ -114,18 +100,20 @@ Result<ByteBuffer> BinaryImageReader::read(uint64_t offset, size_t size) {
     if (!m_open) {
         return ErrorCode::InvalidArgument;
     }
-    FILE* f = std::fopen(m_path.c_str(), "rb");
-    if (!f) {
+    std::ifstream ifs(m_path, std::ios::binary);
+    if (!ifs.is_open()) {
         return ErrorCode::InvalidArgument;
     }
-    if (std::fseek(f, static_cast<long>(offset), SEEK_SET) != 0) {
-        std::fclose(f);
+    ifs.seekg(static_cast<std::streamoff>(offset));
+    if (ifs.fail()) {
         return ErrorCode::InvalidArgument;
     }
     ByteBuffer buf(size);
-    size_t readBytes = std::fread(buf.data(), 1, size, f);
-    std::fclose(f);
-    if (readBytes < size) buf.resize(readBytes);
+    ifs.read(reinterpret_cast<char*>(buf.data()), static_cast<std::streamsize>(size));
+    auto bytesRead = ifs.gcount();
+    if (bytesRead < static_cast<std::streamsize>(size)) {
+        buf.resize(static_cast<size_t>(bytesRead));
+    }
     return buf;
 }
 

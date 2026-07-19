@@ -19,9 +19,14 @@ namespace {
 
 std::string nowIso() {
     auto t = std::time(nullptr);
-    auto tm = *std::gmtime(&t);
+    struct tm tm_buf{};
+#if defined(_WIN32)
+    gmtime_s(&tm_buf, &t);
+#else
+    gmtime_r(&t, &tm_buf);
+#endif
     std::ostringstream ss;
-    ss << std::put_time(&tm, "%Y-%m-%dT%H:%M:%SZ");
+    ss << std::put_time(&tm_buf, "%Y-%m-%dT%H:%M:%SZ");
     return ss.str();
 }
 
