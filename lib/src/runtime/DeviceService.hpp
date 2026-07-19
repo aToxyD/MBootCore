@@ -26,8 +26,8 @@ public:
 
     DeviceService(const DeviceService&) = delete;
     DeviceService& operator=(const DeviceService&) = delete;
-    DeviceService(DeviceService&&) noexcept = default;
-    DeviceService& operator=(DeviceService&&) noexcept = default;
+    DeviceService(DeviceService&&) noexcept = delete;
+    DeviceService& operator=(DeviceService&&) noexcept = delete;
 
     discovery::ProtocolRegistry& protocolRegistry() noexcept { return *m_protocolRegistry; }
     discovery::DeviceDiscoveryEngine& discoveryEngine() noexcept { return *m_discoveryEngine; }

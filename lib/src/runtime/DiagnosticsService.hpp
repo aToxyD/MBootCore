@@ -28,8 +28,8 @@ public:
 
     DiagnosticsService(const DiagnosticsService&) = delete;
     DiagnosticsService& operator=(const DiagnosticsService&) = delete;
-    DiagnosticsService(DiagnosticsService&&) noexcept = default;
-    DiagnosticsService& operator=(DiagnosticsService&&) noexcept = default;
+    DiagnosticsService(DiagnosticsService&&) noexcept = delete;
+    DiagnosticsService& operator=(DiagnosticsService&&) noexcept = delete;
 
     RuntimeStatistics statistics() const override;
     RuntimeHealth health() const override;

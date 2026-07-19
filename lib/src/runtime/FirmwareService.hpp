@@ -39,8 +39,8 @@ public:
 
     FirmwareService(const FirmwareService&) = delete;
     FirmwareService& operator=(const FirmwareService&) = delete;
-    FirmwareService(FirmwareService&&) noexcept = default;
-    FirmwareService& operator=(FirmwareService&&) noexcept = default;
+    FirmwareService(FirmwareService&&) noexcept = delete;
+    FirmwareService& operator=(FirmwareService&&) noexcept = delete;
 
     // Subsystem accessors (needed by RuntimeBuilder)
     firmware::FirmwareValidator& firmwareValidator() noexcept { return *m_firmwareValidator; }
