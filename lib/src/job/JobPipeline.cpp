@@ -192,7 +192,7 @@ Result<void> JobPipeline::executeJob(std::size_t index, JobContext& context) {
     auto& entry = m_jobs[index];
     auto* job = entry.job.get();
 
-    context.progressCallback = [this, job](const std::string& id, const ProgressInfo& info) {
+    context.progressCallback = [this](const std::string& id, const ProgressInfo& info) {
         reportProgress(id, info);
     };
 

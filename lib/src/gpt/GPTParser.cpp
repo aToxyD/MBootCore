@@ -40,13 +40,6 @@ inline bool safeMul(uint64_t a, uint64_t b, uint64_t& result) {
     return true;
 }
 
-// Safe add: returns false on overflow.
-inline bool safeAdd(uint64_t a, uint64_t b, uint64_t& result) {
-    if (a > std::numeric_limits<uint64_t>::max() - b) return false;
-    result = a + b;
-    return true;
-}
-
 // ── Header field validation ──
 // Validates numberOfPartitionEntries and sizeOfPartitionEntry immediately
 // after decoding, before any allocation, reservation, or sector read
