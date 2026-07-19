@@ -1,0 +1,405 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 23,
+        "patch": 0
+    },
+
+    "configurePresets": [
+
+        {
+            "name": "debug",
+            "displayName": "Debug",
+            "binaryDir": "${sourceDir}/build/debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "MBOOTCORE_BUILD_TESTS": "ON",
+                "MBOOTCORE_BUILD_SECURITY_TESTS": "ON",
+                "MBOOTCORE_WARNINGS_AS_ERRORS": "ON"
+            }
+        },
+
+        {
+            "name": "release",
+            "displayName": "Release",
+            "binaryDir": "${sourceDir}/build/release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "MBOOTCORE_BUILD_TESTS": "OFF",
+                "MBOOTCORE_BUILD_SECURITY_TESTS": "OFF",
+                "MBOOTCORE_BUILD_TOOLS": "OFF",
+                "MBOOTCORE_BUILD_CLI": "OFF",
+                "MBOOTCORE_BUILD_STUDIO": "OFF",
+                "MBOOTCORE_BUILD_EXAMPLES": "OFF"
+            }
+        },
+
+        {
+            "name": "release-package",
+            "hidden": true,
+            "displayName": "Release (Package)",
+            "description": "Standalone base preset for GitHub Release packaging. Not used directly — use platform variants.",
+            "binaryDir": "${sourceDir}/build/release-package",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "MBOOTCORE_BUILD_TESTS": "OFF",
+                "MBOOTCORE_BUILD_SECURITY_TESTS": "OFF",
+                "MBOOTCORE_BUILD_TOOLS": "OFF",
+                "MBOOTCORE_BUILD_CLI": "ON",
+                "MBOOTCORE_BUILD_STUDIO": "ON",
+                "MBOOTCORE_BUILD_EXAMPLES": "OFF"
+            }
+        },
+
+        {
+            "name": "release-package-verify",
+            "hidden": true,
+            "inherits": "release-package",
+            "displayName": "Release (Verify + Package)",
+            "description": "Verification build preset. Enables all verification targets required by the local release workflow before packaging. Test binaries are not installed or included in the final package.",
+            "cacheVariables": {
+                "MBOOTCORE_BUILD_TESTS": "ON",
+                "MBOOTCORE_BUILD_SECURITY_TESTS": "ON",
+                "MBOOTCORE_BUILD_TOOLS": "ON"
+            }
+        },
+
+        {
+            "name": "release-package-linux-gcc",
+            "inherits": "release-package",
+            "displayName": "Release (Package, Linux GCC)",
+            "description": "Linux GCC packaging. Native x64 and ARM64 cross-compilation intentionally share this preset and build directory. In CI each matrix job runs in an isolated workspace. Locally, delete build/release-package-linux-gcc before reconfiguring when switching between native and cross builds.",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/release-package-linux-gcc"
+        },
+
+        {
+            "name": "release-package-linux-clang",
+            "inherits": "release-package",
+            "displayName": "Release (Package, Linux Clang)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/release-package-linux-clang"
+        },
+
+        {
+            "name": "release-package-msvc-x86",
+            "inherits": "release-package",
+            "displayName": "Release (Package, MSVC x86)",
+            "generator": "Visual Studio 17 2022",
+            "binaryDir": "${sourceDir}/build/release-package-msvc-x86"
+        },
+
+        {
+            "name": "release-package-msvc-x64",
+            "inherits": "release-package",
+            "displayName": "Release (Package, MSVC x64)",
+            "generator": "Visual Studio 17 2022",
+            "binaryDir": "${sourceDir}/build/release-package-msvc-x64"
+        },
+
+        {
+            "name": "release-package-msvc-arm64",
+            "inherits": "release-package",
+            "displayName": "Release (Package, MSVC ARM64)",
+            "generator": "Visual Studio 17 2022",
+            "binaryDir": "${sourceDir}/build/release-package-msvc-arm64"
+        },
+
+        {
+            "name": "release-package-mingw-x64",
+            "inherits": "release-package",
+            "displayName": "Release (Package, MinGW x64)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/release-package-mingw-x64"
+        },
+
+        {
+            "name": "release-package-mingw-x86",
+            "inherits": "release-package",
+            "displayName": "Release (Package, MinGW x86)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/release-package-mingw-x86"
+        },
+
+        {
+            "name": "release-package-macos-x64",
+            "inherits": "release-package",
+            "displayName": "Release (Package, macOS Intel)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/release-package-macos-x64"
+        },
+
+        {
+            "name": "release-package-macos-arm64",
+            "inherits": "release-package",
+            "displayName": "Release (Package, macOS ARM64)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/release-package-macos-arm64"
+        },
+
+        {
+            "name": "release-package-verify-linux-gcc",
+            "inherits": "release-package-verify",
+            "displayName": "Release (Verify, Linux GCC)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/release-package-verify-linux-gcc"
+        },
+
+        {
+            "name": "release-package-verify-macos-x64",
+            "inherits": "release-package-verify",
+            "displayName": "Release (Verify, macOS Intel)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/release-package-verify-macos-x64"
+        },
+
+        {
+            "name": "release-package-verify-macos-arm64",
+            "inherits": "release-package-verify",
+            "displayName": "Release (Verify, macOS ARM64)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/release-package-verify-macos-arm64"
+        },
+
+        {
+            "name": "relwithdebinfo",
+            "displayName": "RelWithDebInfo",
+            "binaryDir": "${sourceDir}/build/relwithdebinfo",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
+        },
+
+        {
+            "name": "asan",
+            "inherits": "debug",
+            "displayName": "Debug + ASan",
+            "binaryDir": "${sourceDir}/build/asan",
+            "cacheVariables": {
+                "MBOOTCORE_ENABLE_ASAN": "ON"
+            }
+        },
+
+        {
+            "name": "ubsan",
+            "inherits": "debug",
+            "displayName": "Debug + UBSan",
+            "binaryDir": "${sourceDir}/build/ubsan",
+            "cacheVariables": {
+                "MBOOTCORE_ENABLE_UBSAN": "ON"
+            }
+        },
+
+        {
+            "name": "asan-ubsan",
+            "inherits": "debug",
+            "displayName": "Debug + ASan + UBSan",
+            "binaryDir": "${sourceDir}/build/asan-ubsan",
+            "cacheVariables": {
+                "MBOOTCORE_ENABLE_ASAN": "ON",
+                "MBOOTCORE_ENABLE_UBSAN": "ON"
+            }
+        },
+
+        {
+            "name": "tsan",
+            "inherits": "debug",
+            "displayName": "Debug + TSan",
+            "binaryDir": "${sourceDir}/build/tsan",
+            "cacheVariables": {
+                "MBOOTCORE_ENABLE_TSAN": "ON"
+            }
+        },
+
+        {
+            "name": "coverage",
+            "inherits": "debug",
+            "displayName": "Debug + Coverage",
+            "binaryDir": "${sourceDir}/build/coverage",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "--coverage -O0 -g",
+                "CMAKE_EXE_LINKER_FLAGS": "--coverage"
+            }
+        },
+
+        {
+            "name": "fuzzing",
+            "inherits": "asan-ubsan",
+            "displayName": "Debug + Fuzzing",
+            "binaryDir": "${sourceDir}/build/fuzzing",
+            "cacheVariables": {
+                "MBOOTCORE_BUILD_FUZZERS": "ON"
+            }
+        },
+
+        {
+            "name": "clang-tidy",
+            "inherits": "debug",
+            "displayName": "Debug + clang-tidy",
+            "binaryDir": "${sourceDir}/build/clang-tidy",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        }
+
+    ],
+
+    "buildPresets": [
+
+        {
+            "name": "debug",
+            "configurePreset": "debug"
+        },
+
+        {
+            "name": "release",
+            "configurePreset": "release"
+        },
+
+        {
+            "name": "release-package-linux-gcc",
+            "configurePreset": "release-package-linux-gcc"
+        },
+
+        {
+            "name": "release-package-linux-clang",
+            "configurePreset": "release-package-linux-clang"
+        },
+
+        {
+            "name": "release-package-msvc-x86",
+            "configurePreset": "release-package-msvc-x86"
+        },
+
+        {
+            "name": "release-package-msvc-x64",
+            "configurePreset": "release-package-msvc-x64"
+        },
+
+        {
+            "name": "release-package-msvc-arm64",
+            "configurePreset": "release-package-msvc-arm64"
+        },
+
+        {
+            "name": "release-package-mingw-x64",
+            "configurePreset": "release-package-mingw-x64"
+        },
+
+        {
+            "name": "release-package-mingw-x86",
+            "configurePreset": "release-package-mingw-x86"
+        },
+
+        {
+            "name": "release-package-macos-x64",
+            "configurePreset": "release-package-macos-x64"
+        },
+
+        {
+            "name": "release-package-macos-arm64",
+            "configurePreset": "release-package-macos-arm64"
+        },
+
+        {
+            "name": "release-package-verify-linux-gcc",
+            "configurePreset": "release-package-verify-linux-gcc"
+        },
+
+        {
+            "name": "release-package-verify-macos-x64",
+            "configurePreset": "release-package-verify-macos-x64"
+        },
+
+        {
+            "name": "release-package-verify-macos-arm64",
+            "configurePreset": "release-package-verify-macos-arm64"
+        },
+
+        {
+            "name": "relwithdebinfo",
+            "configurePreset": "relwithdebinfo"
+        },
+
+        {
+            "name": "asan",
+            "configurePreset": "asan"
+        },
+
+        {
+            "name": "asan-ubsan",
+            "configurePreset": "asan-ubsan"
+        },
+
+        {
+            "name": "tsan",
+            "configurePreset": "tsan"
+        },
+
+        {
+            "name": "coverage",
+            "configurePreset": "coverage"
+        },
+
+        {
+            "name": "fuzzing",
+            "configurePreset": "fuzzing"
+        }
+
+    ],
+
+    "testPresets": [
+
+        {
+            "name": "default",
+            "configurePreset": "debug",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+
+        {
+            "name": "asan",
+            "configurePreset": "asan",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+
+        {
+            "name": "asan-ubsan",
+            "configurePreset": "asan-ubsan",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+
+        {
+            "name": "tsan",
+            "configurePreset": "tsan",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+
+        {
+            "name": "coverage",
+            "configurePreset": "coverage",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+
+        {
+            "name": "release",
+            "configurePreset": "release"
+        },
+
+        {
+            "name": "relwithdebinfo",
+            "configurePreset": "relwithdebinfo"
+        }
+
+    ]
+}

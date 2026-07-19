@@ -1,0 +1,307 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+
+  # ════════════════════════════════════════════════════════════════
+  # Job 1: Validate tag, VERSION, and Release
+  # ════════════════════════════════════════════════════════════════
+  validate:
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Validate tag matches VERSION
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          FILE_VERSION="$(tr -d '[:space:]' < VERSION)"
+          TAG_VERSION="${TAG#v}"
+
+          echo "Tag:     ${TAG}"
+          echo "Version: ${FILE_VERSION}"
+
+          if [ "${TAG_VERSION}" != "${FILE_VERSION}" ]; then
+            echo "::error::Tag '${TAG}' version '${TAG_VERSION}' does not match VERSION file '${FILE_VERSION}'"
+            exit 1
+          fi
+
+          echo "version=${FILE_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Check Release status
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "${{ github.ref_name }}" > /dev/null 2>&1; then
+            echo "Release '${{ github.ref_name }}' exists — assets will be added."
+          else
+            echo "Release '${{ github.ref_name }}' not found — will be created."
+          fi
+
+  # ════════════════════════════════════════════════════════════════
+  # Job 2: Build matrix (10 platforms, packaging only)
+  # ════════════════════════════════════════════════════════════════
+  build:
+    needs: validate
+    runs-on: ${{ matrix.runner }}
+    defaults:
+      run:
+        shell: ${{ matrix.shell || 'bash' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # ── Linux ──────────────────────────────────────
+          - id: linux-gcc-x64
+            name: "Linux GCC x64"
+            runner: ubuntu-24.04
+            preset: release-package-linux-gcc
+            build_dir: build/release-package-linux-gcc
+            cc: gcc
+            cxx: g++
+            arch: x64
+
+          - id: linux-gcc-arm64
+            name: "Linux GCC ARM64"
+            runner: ubuntu-24.04
+            preset: release-package-linux-gcc
+            build_dir: build/release-package-linux-gcc
+            cc: aarch64-linux-gnu-gcc
+            cxx: aarch64-linux-gnu-g++
+            arch: arm64
+            cross: true
+            toolchain: cmake/toolchains/linux-arm64-gcc.cmake
+
+          - id: linux-clang-x64
+            name: "Linux Clang x64"
+            runner: ubuntu-24.04
+            preset: release-package-linux-clang
+            build_dir: build/release-package-linux-clang
+            cc: clang
+            cxx: clang++
+            arch: x64
+
+          # ── Windows MSVC ───────────────────────────────
+          - id: windows-msvc-x86
+            name: "Windows MSVC x86"
+            runner: windows-2022
+            preset: release-package-msvc-x86
+            build_dir: build/release-package-msvc-x86
+            arch: x86
+            msvc_arch: Win32
+
+          - id: windows-msvc-x64
+            name: "Windows MSVC x64"
+            runner: windows-2022
+            preset: release-package-msvc-x64
+            build_dir: build/release-package-msvc-x64
+            arch: x64
+            msvc_arch: x64
+
+          - id: windows-msvc-arm64
+            name: "Windows MSVC ARM64"
+            runner: windows-2022
+            preset: release-package-msvc-arm64
+            build_dir: build/release-package-msvc-arm64
+            arch: arm64
+            msvc_arch: ARM64
+
+          # ── Windows MinGW ──────────────────────────────
+          - id: windows-mingw-x64
+            name: "Windows MinGW x64"
+            runner: windows-2022
+            preset: release-package-mingw-x64
+            build_dir: build/release-package-mingw-x64
+            arch: x64
+            shell: msys2 {0}
+            msystem: MINGW64
+            mingw_packages: >-
+              mingw-w64-x86_64-gcc
+              mingw-w64-x86_64-cmake
+              mingw-w64-x86_64-ninja
+
+          - id: windows-mingw-x86
+            name: "Windows MinGW x86"
+            runner: windows-2022
+            preset: release-package-mingw-x86
+            build_dir: build/release-package-mingw-x86
+            arch: x86
+            shell: msys2 {0}
+            msystem: MINGW32
+            mingw_packages: >-
+              mingw-w64-i686-gcc
+              mingw-w64-i686-cmake
+              mingw-w64-i686-ninja
+
+          # ── macOS ──────────────────────────────────────
+          - id: macos-appleclang-x64
+            name: "macOS Intel x64"
+            runner: macos-13
+            preset: release-package-macos-x64
+            build_dir: build/release-package-macos-x64
+            arch: x64
+
+          - id: macos-appleclang-arm64
+            name: "macOS ARM64"
+            runner: macos-14
+            preset: release-package-macos-arm64
+            build_dir: build/release-package-macos-arm64
+            arch: arm64
+
+    env:
+      VERSION: ${{ needs.validate.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # ── Linux ARM64 cross-compilation toolchain ───────
+      - name: Install cross-compilation toolchain
+        if: matrix.cross
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+
+      # ── Ninja (Linux + macOS) ────────────────────────
+      - name: Install Ninja
+        if: runner.os != 'Windows'
+        run: |
+          if command -v ninja &>/dev/null; then
+            echo "Ninja already installed"
+          elif command -v brew &>/dev/null; then
+            brew install ninja
+          else
+            sudo apt-get update -qq && sudo apt-get install -y -qq ninja-build
+          fi
+
+      # ── Windows MinGW toolchain ──────────────────────
+      - name: Install MinGW toolchain
+        if: matrix.mingw_packages
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{ matrix.msystem }}
+          install: ${{ matrix.mingw_packages }}
+
+      # ── Cache dependencies ───────────────────────────
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: deps
+          key: ${{ runner.os }}-${{ matrix.id }}-${{ hashFiles('cmake/DependencyVersions.cmake') }}
+          restore-keys: ${{ runner.os }}-${{ matrix.id }}-
+
+      # ── Configure ────────────────────────────────────
+      - name: Configure
+        run: >-
+          cmake --preset ${{ matrix.preset }}
+          ${{ matrix.msvc_arch && format('-A {0}', matrix.msvc_arch) || '' }}
+          ${{ matrix.cross && format('-DCMAKE_TOOLCHAIN_FILE={0}', matrix.toolchain) || '' }}
+
+      # ── Build ────────────────────────────────────────
+      - name: Build
+        run: cmake --build --preset ${{ matrix.preset }} --parallel
+
+      # ── Install ──────────────────────────────────────
+      - name: Install
+        run: cmake --install "${{ matrix.build_dir }}" --prefix _install
+
+      # ── Package Runtime ──────────────────────────────
+      - name: Package runtime
+        shell: bash
+        run: |
+          PKG="MBootCore-${VERSION}-${{ matrix.id }}-runtime"
+          mkdir -p "${PKG}"
+          cp -r _install/bin "${PKG}/" 2>/dev/null || true
+          mkdir -p "${PKG}/lib"
+          cp _install/lib/libmbootcore.* "${PKG}/lib/" 2>/dev/null || \
+          cp _install/lib/mbootcore.*   "${PKG}/lib/" 2>/dev/null || true
+          cp LICENSE NOTICE ThirdPartyLicenses.md README.md "${PKG}/"
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            7z a "${PKG}.zip" "${PKG}"
+          else
+            tar czf "${PKG}.tar.gz" "${PKG}"
+          fi
+
+      # ── Package SDK ──────────────────────────────────
+      - name: Package SDK
+        shell: bash
+        run: |
+          PKG="MBootCore-${VERSION}-${{ matrix.id }}-sdk"
+          mkdir -p "${PKG}"
+          cp -r _install/include "${PKG}/"
+          mkdir -p "${PKG}/lib/cmake"
+          cp -r _install/lib/cmake/MBootCore "${PKG}/lib/cmake/"
+          cp _install/share/doc/MBootCore/SDK_INFO.json "${PKG}/" 2>/dev/null || true
+          cp LICENSE NOTICE ThirdPartyLicenses.md README.md "${PKG}/"
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            7z a "${PKG}.zip" "${PKG}"
+          else
+            tar czf "${PKG}.tar.gz" "${PKG}"
+          fi
+
+      # ── Upload artifacts ─────────────────────────────
+      - name: Upload runtime package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.id }}-runtime
+          path: MBootCore-${{ env.VERSION }}-${{ matrix.id }}-runtime.*
+          if-no-files-found: error
+
+      - name: Upload SDK package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.id }}-sdk
+          path: MBootCore-${{ env.VERSION }}-${{ matrix.id }}-sdk.*
+          if-no-files-found: error
+
+  # ════════════════════════════════════════════════════════════════
+  # Job 3: Publish all packages to the GitHub Release
+  # ════════════════════════════════════════════════════════════════
+  publish:
+    needs: [validate, build]
+    runs-on: ubuntu-24.04
+    env:
+      VERSION: ${{ needs.validate.outputs.version }}
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: "*"
+          merge-multiple: true
+
+      - name: Verify artifact count
+        run: |
+          COUNT=$(find artifacts -type f \( -name "*.tar.gz" -o -name "*.zip" \) | wc -l)
+          echo "Found ${COUNT} packages"
+          if [ "${COUNT}" -ne 20 ]; then
+            echo "::error::Expected 20 packages, found ${COUNT}"
+            find artifacts -type f \( -name "*.tar.gz" -o -name "*.zip" \) \
+              -exec basename {} \; | sort
+            exit 1
+          fi
+          echo "All 20 packages verified:"
+          find artifacts -type f \( -name "*.tar.gz" -o -name "*.zip" \) \
+            -exec basename {} \; | sort
+
+      - name: Publish to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: artifacts/*
+          fail_on_unmatched_files: true

@@ -1,0 +1,107 @@
+#include <mbootcore/plugin/IProtocolPlugin.hpp>
+#include <mbootcore/plugin/PluginContext.hpp>
+#include <mbootcore/plugin/PluginABI.hpp>
+#include <mbootcore/domain/Error.hpp>
+
+#include <string>
+#include <vector>
+#include <cstdint>
+#include <atomic>
+#include <memory>
+
+using namespace mbootcore;
+using namespace mbootcore::plugin;
+namespace disc = mbootcore::discovery;
+
+class %PROTOCOL_NAME%ProtocolPlugin final : public IProtocolPlugin {
+public:
+    %PROTOCOL_NAME%ProtocolPlugin() = default;
+    ~%PROTOCOL_NAME%ProtocolPlugin() override = default;
+
+    PluginMetadata metadata() const noexcept override {
+        PluginMetadata meta;
+        meta.name = "%PROTOCOL_NAME%";
+        meta.version = "1.0.0";
+        meta.apiVersion = PluginABIVersion;
+        meta.vendor = disc::Vendor::%VENDOR_ENUM%;
+        meta.author = "%AUTHOR%";
+        meta.license = "%LICENSE%";
+        meta.description = "%PROTOCOL_DESCRIPTION%";
+        meta.capabilities = PluginCapability::Protocol;
+        meta.supportedProtocols = { disc::ProtocolType::%PROTOCOL_TYPE% };
+        meta.priority = 100;
+        meta.uuid = "%UUID%";
+        meta.compatibilityVersion = 1;
+        return meta;
+    }
+
+    PluginState state() const noexcept override {
+        return state_;
+    }
+
+    void setEnabled(bool enabled) noexcept override {
+        enabled_ = enabled;
+    }
+
+    bool isEnabled() const noexcept override {
+        return enabled_;
+    }
+
+    Result<void> initialize(PluginContext& context) override {
+        context.log("%PROTOCOL_NAME% protocol plugin initializing...");
+        auto& registry = context.registry();
+
+        initialized_ = true;
+        state_ = PluginState::Initialized;
+        return Result<void>::Ok();
+    }
+
+    Result<void> shutdown() noexcept override {
+        initialized_ = false;
+        state_ = PluginState::Loaded;
+        return Result<void>::Ok();
+    }
+
+    Result<void> registerComponents(PluginContext& context) override {
+        context.log("Registering %PROTOCOL_NAME% protocol components");
+        auto& registry = context.registry();
+
+        state_ = PluginState::Initialized;
+        return Result<void>::Ok();
+    }
+
+    Result<void> unregisterComponents(PluginContext& context) override {
+        context.log("Unregistering %PROTOCOL_NAME% protocol components");
+        state_ = PluginState::Loaded;
+        return Result<void>::Ok();
+    }
+
+    disc::ProtocolType protocolType() const noexcept override {
+        return disc::ProtocolType::%PROTOCOL_TYPE%;
+    }
+
+    std::vector<disc::ProtocolType> supportedProtocols() const noexcept override {
+        return {
+            disc::ProtocolType::%PROTOCOL_TYPE%
+        };
+    }
+
+private:
+    PluginState state_{PluginState::Unloaded};
+    bool enabled_{true};
+    bool initialized_{false};
+};
+
+extern "C" {
+MBOOTCORE_PLUGIN_EXPORT IPlugin* mbootcore_plugin_create() {
+    return new %PROTOCOL_NAME%ProtocolPlugin();
+}
+
+MBOOTCORE_PLUGIN_EXPORT void mbootcore_plugin_destroy(IPlugin* plugin) {
+    delete plugin;
+}
+
+MBOOTCORE_PLUGIN_EXPORT uint32_t mbootcore_plugin_abi_version() {
+    return PluginABIVersion;
+}
+}

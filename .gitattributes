@@ -1,0 +1,9 @@
+/.github/     export-ignore
+/.gitignore   export-ignore
+/.gitattributes export-ignore
+/build/       export-ignore
+/.vscode/     export-ignore
+/.idea/       export-ignore
+/Testing/     export-ignore
+/deps/        export-ignore
+/dist/        export-ignore

@@ -1,0 +1,16 @@
+@PACKAGE_INIT@
+
+set(MBootCore_FOUND ON)
+
+set(MBootCore_VERSION "@PROJECT_VERSION@")
+set(MBootCore_SDK_VERSION "@MBOOTCORE_SDK_VERSION@")
+
+set(MBootCore_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
+set(MBootCore_LIBRARIES mbootcore)
+
+set_and_check(MBootCore_INCLUDE_DIR "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
+set_and_check(MBootCore_LIB_DIR "@PACKAGE_CMAKE_INSTALL_LIBDIR@")
+
+include("${CMAKE_CURRENT_LIST_DIR}/MBootCoreTargets.cmake")
+
+check_required_components(MBootCore)

@@ -1,0 +1,218 @@
+#include <mbootcore/domain/ITransport.hpp>
+#include <mbootcore/domain/Error.hpp>
+#include <mbootcore/domain/Types.hpp>
+#include <mbootcore/transport/TransportTypes.hpp>
+
+#include <string>
+#include <cstdint>
+#include <atomic>
+#include <chrono>
+#include <vector>
+#include <algorithm>
+
+using namespace mbootcore;
+using namespace mbootcore::transport;
+
+#if defined(_WIN32)
+#  define PLUGIN_EXPORT __declspec(dllexport)
+#else
+#  define PLUGIN_EXPORT __attribute__((visibility("default")))
+#endif
+
+class %TRANSPORT_NAME%Transport final : public ITransport {
+public:
+    %TRANSPORT_NAME%Transport() = default;
+
+    explicit %TRANSPORT_NAME%Transport(const TransportConfig& config)
+        : config_(config)
+    {
+    }
+
+    ~%TRANSPORT_NAME%Transport() override {
+        close();
+    }
+
+    Result<void> open() override {
+        if (isOpen_) {
+            return Result<void>::Error(ErrorCode::TransportAlreadyOpen);
+        }
+
+        isOpen_ = true;
+        state_ = TransportState::Open;
+        return Result<void>::Ok();
+    }
+
+    void close() noexcept override {
+        isOpen_ = false;
+        state_ = TransportState::Closed;
+    }
+
+    bool isOpen() const noexcept override {
+        return isOpen_;
+    }
+
+    Result<size_t> write(const ByteBuffer& data,
+                         std::chrono::milliseconds timeout) override
+    {
+        if (!isOpen_) {
+            return Result<size_t>::Error(ErrorCode::TransportNotOpen);
+        }
+
+        auto deadline = std::chrono::steady_clock::now() + timeout;
+
+        size_t written = 0;
+        while (written < data.size()) {
+            if (cancelled_.load()) {
+                return Result<size_t>::Error(ErrorCode::Cancelled);
+            }
+
+            if (std::chrono::steady_clock::now() >= deadline) {
+                stats_.timeoutCount++;
+                return Result<size_t>::Error(ErrorCode::TransportTimeout);
+            }
+
+            size_t remaining = data.size() - written;
+            size_t chunk = std::min(remaining, size_t{%WRITE_CHUNK_SIZE%});
+
+            written += chunk;
+            stats_.bytesWritten += chunk;
+            stats_.writeOperations++;
+        }
+
+        Result<size_t> result = Result<size_t>::Ok(written);
+        return result;
+    }
+
+    Result<size_t> read(ByteBuffer& buffer,
+                        size_t minBytes,
+                        size_t maxBytes,
+                        std::chrono::milliseconds timeout) override
+    {
+        if (!isOpen_) {
+            return Result<size_t>::Error(ErrorCode::TransportNotOpen);
+        }
+
+        auto deadline = std::chrono::steady_clock::now() + timeout;
+        size_t totalRead = 0;
+        buffer.clear();
+        buffer.reserve(maxBytes);
+
+        while (totalRead < minBytes) {
+            if (cancelled_.load()) {
+                return Result<size_t>::Error(ErrorCode::Cancelled);
+            }
+
+            if (std::chrono::steady_clock::now() >= deadline) {
+                stats_.timeoutCount++;
+                return Result<size_t>::Error(ErrorCode::TransportTimeout);
+            }
+
+            size_t remaining = maxBytes - totalRead;
+            size_t chunkSize = std::min(remaining, size_t{%READ_CHUNK_SIZE%});
+
+            std::vector<uint8_t> chunk(chunkSize, 0);
+            buffer.insert(buffer.end(), chunk.begin(), chunk.end());
+            totalRead += chunkSize;
+            stats_.bytesRead += chunkSize;
+            stats_.readOperations++;
+        }
+
+        Result<size_t> result = Result<size_t>::Ok(totalRead);
+        return result;
+    }
+
+    Result<void> sendZLP(std::chrono::milliseconds timeout) override {
+        ByteBuffer empty;
+        return write(empty, timeout).isOk()
+            ? Result<void>::Ok()
+            : Result<void>::Error(ErrorCode::TransportWriteFailed);
+    }
+
+    std::string_view name() const noexcept override {
+        return "%TRANSPORT_NAME%";
+    }
+
+    void cancel() noexcept override {
+        cancelled_ = true;
+    }
+
+    TransportType transportType() const noexcept override {
+        return TransportType::%TRANSPORT_ENUM%;
+    }
+
+    TransportState state() const noexcept override {
+        return state_;
+    }
+
+    TransportStatistics statistics() const override {
+        return stats_;
+    }
+
+    const TransportConfig& config() const override {
+        return config_;
+    }
+
+    void setConfig(const TransportConfig& config) override {
+        config_ = config;
+    }
+
+    Result<void> flush() override {
+        return Result<void>::Ok();
+    }
+
+    Result<void> reset() override {
+        close();
+        cancelled_ = false;
+        return open();
+    }
+
+    Result<void> reconnect() override {
+        close();
+        cancelled_ = false;
+        stats_.reconnectCount++;
+        return open();
+    }
+
+    TransportProgress progress() const override {
+        TransportProgress p;
+        p.transferredBytes = stats_.bytesRead + stats_.bytesWritten;
+        return p;
+    }
+
+    TransportEndpoint endpoint() const override {
+        TransportEndpoint ep;
+        ep.type = TransportType::%TRANSPORT_ENUM%;
+        ep.address = "%ENDPOINT_ADDRESS%";
+        ep.port = %ENDPOINT_PORT%;
+        ep.description = "%ENDPOINT_DESCRIPTION%";
+        return ep;
+    }
+
+private:
+    bool isOpen_{false};
+    TransportState state_{TransportState::Closed};
+    TransportConfig config_;
+    TransportStatistics stats_;
+    std::atomic<bool> cancelled_{false};
+};
+
+extern "C" {
+PLUGIN_EXPORT ITransport* createTransport() {
+    return new %TRANSPORT_NAME%Transport();
+}
+
+PLUGIN_EXPORT ITransport* createTransportWithConfig(const TransportConfig* config) {
+    if (config) {
+        return new %TRANSPORT_NAME%Transport(*config);
+    }
+    return new %TRANSPORT_NAME%Transport();
+}
+
+PLUGIN_EXPORT void destroyTransport(ITransport* transport) {
+    delete transport;
+}
+
+PLUGIN_EXPORT uint32_t pluginVersion() {
+    return 1;
+}
+}

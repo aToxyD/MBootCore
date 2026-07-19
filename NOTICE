@@ -1,0 +1,24 @@
+MBootCore
+Copyright (c) 2026 MBootCore Contributors
+
+This software incorporates third-party components as described below.
+
+---
+
+Third-Party Notices
+
+1. Qt 6 (https://www.qt.io/)
+   Licensed under the GNU Lesser General Public License v2.1 (LGPL-2.1).
+   A copy of this license can be found at:
+   https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+
+2. zlib (https://www.zlib.net/)
+   Licensed under the zlib License.
+   Copyright (c) 1995-2024 Jean-loup Gailly and Mark Adler.
+   A copy of this license can be found at:
+   https://www.zlib.net/zlib_license.html
+
+3. MinGW-w64 (http://mingw-w64.org/)
+   Licensed under the GNU General Public License v2 with GCC Runtime Library Exception.
+   A copy of this license can be found at:
+   https://gcc.gnu.org/onlinedocs/libstdc++/manual/license.html

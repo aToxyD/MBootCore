@@ -1,0 +1,58 @@
+# MBootCore Doxygen configuration
+# @configure_input@
+
+PROJECT_NAME           = "MBootCore"
+PROJECT_NUMBER         = @PROJECT_VERSION@
+PROJECT_BRIEF          = "Professional low-level C++17 framework for BootROM protocols"
+
+OUTPUT_DIRECTORY       = @CMAKE_CURRENT_BINARY_DIR@/docs/api
+INPUT                  = @CMAKE_SOURCE_DIR@/lib/include/mbootcore \
+                         @CMAKE_SOURCE_DIR@/sdk/include/sdk
+RECURSIVE              = YES
+
+FILE_PATTERNS          = *.hpp *.h
+EXCLUDE_PATTERNS       = */.git/* */build/*
+
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+HTML_OUTPUT            = html
+
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = NO
+
+SORT_MEMBER_DOCS       = YES
+SORT_BRIEF_DOCS        = YES
+
+INLINE_SOURCES         = NO
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION    = YES
+
+SOURCE_BROWSER         = YES
+ALPHABETICAL_INDEX     = YES
+COLS_IN_ALPHA_INDEX    = 5
+
+GENERATE_TREEVIEW      = YES
+DISABLE_INDEX          = NO
+FULL_SIDEBAR           = NO
+
+HTML_DYNAMIC_MENUS     = YES
+HTML_EXTRA_STYLESHEET  =
+HTML_EXTRA_FILES       =
+
+WARN_NO_PARAMDOC       = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+
+QUIET                  = NO
+
+CLASS_DIAGRAMS         = YES
+HAVE_DOT               = YES if available
+DOT_NUM_THREADS        = 0
+DOT_IMAGE_FORMAT       = svg
+INTERACTIVE_SVG        = YES
+DOT_GRAPH_MAX_NODES    = 50
+MAX_DOT_GRAPH_DEPTH    = 3
+UML_LOOK               = YES
+TEMPLATE_RELATIONS     = YES
+DOT_TRANSPARENT        = YES

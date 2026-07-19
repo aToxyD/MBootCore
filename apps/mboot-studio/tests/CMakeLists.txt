@@ -1,0 +1,36 @@
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTOMOC ON)
+
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Test)
+
+set(STUDIO_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+function(add_studio_test TEST_NAME TEST_FILE)
+    add_executable(${TEST_NAME} ${TEST_FILE})
+    target_link_libraries(${TEST_NAME} PRIVATE
+        mbootstudio
+        Qt6::Test
+    )
+    mbootcore_apply_warnings(${TEST_NAME})
+    add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
+endfunction()
+
+add_studio_test(studio_framework_test framework_test.cpp)
+add_studio_test(studio_discovery_test discovery_test.cpp)
+add_studio_test(studio_session_test session_test.cpp)
+add_studio_test(studio_firmware_test firmware_test.cpp)
+add_studio_test(studio_flash_test flash_test.cpp)
+add_studio_test(studio_gpt_test gpt_test.cpp)
+add_studio_test(studio_workflow_test workflow_test.cpp)
+add_studio_test(studio_job_test job_test.cpp)
+add_studio_test(studio_plugin_test plugin_test.cpp)
+add_studio_test(studio_vendor_test vendor_test.cpp)
+add_studio_test(studio_transport_test transport_test.cpp)
+add_studio_test(studio_logs_test logs_test.cpp)
+add_studio_test(studio_settings_test settings_test.cpp)
+add_studio_test(studio_diagnostics_test diagnostics_test.cpp)
+add_studio_test(studio_devtools_test devtools_test.cpp)
+add_studio_test(studio_theme_test theme_test.cpp)
+add_studio_test(studio_l10n_test l10n_test.cpp)
+set_tests_properties(studio_l10n_test PROPERTIES LABELS "Environment")
+add_studio_test(studio_integration_test integration_test.cpp)

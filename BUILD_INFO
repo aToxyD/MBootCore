@@ -1,0 +1,24 @@
+MBootCore Build Information
+==========================
+Version:        1.0.0
+Build System:   CMake 3.20+
+Compiler:       C++17 (Validated: MinGW-w64 GCC 13+ | Expected: GCC 11+, Clang 15+)
+Framework:      C++17 (Qt6 GUI only)
+Dependencies:   Qt 6 (LGPL-2.1), zlib (zlib License), nlohmann/json v3.12.0 (MIT License),
+                MinGW-w64 (GCC Runtime Exception)
+Platform:       Cross-platform (Windows, Linux, macOS)
+Architecture:   Clean Architecture (6 layers)
+Test Status:    All 114 test files, 213 test cases, 2291 assertions pass in CI
+
+JSON Library:   nlohmann/json v3.12.0 replaces all hand-written JSON parsers/serializers
+                across 14 source files in the core library. All JSON operations wrapped
+                in try/catch with Result<T>/ErrorCode — no exceptions cross library boundaries.
+
+USB Backend:    Unified dependency model (pkg-config → find_package → FetchContent).
+                Controlled by MBOOTCORE_ENABLE_USB (default ON).
+                WinUSB on Windows, libusb on Linux/macOS.
+
+Optional build flags (use `-D<FLAG>=ON`): MBOOTCORE_BUILD_TESTS, MBOOTCORE_BUILD_CLI,
+MBOOTCORE_BUILD_STUDIO, MBOOTCORE_BUILD_EXAMPLES, MBOOTCORE_BUILD_TOOLS,
+MBOOTCORE_ENABLE_USB, MBOOTCORE_ENABLE_CRYPTO, MBOOTCORE_ENABLE_VENDOR_SCAFFOLDS,
+BUILD_STUDIO_TESTS

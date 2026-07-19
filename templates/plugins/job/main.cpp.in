@@ -1,0 +1,222 @@
+#include <mbootcore/job/IJob.hpp>
+#include <mbootcore/job/JobTypes.hpp>
+#include <mbootcore/generic/ProgressInfo.hpp>
+#include <mbootcore/domain/Error.hpp>
+#include <mbootcore/domain/Types.hpp>
+
+#include <string>
+#include <atomic>
+#include <memory>
+#include <chrono>
+
+using namespace mbootcore;
+using namespace mbootcore::job;
+
+#if defined(_WIN32)
+#  define PLUGIN_EXPORT __declspec(dllexport)
+#else
+#  define PLUGIN_EXPORT __attribute__((visibility("default")))
+#endif
+
+class %JOB_NAME%Job final : public IJob {
+public:
+    %JOB_NAME%Job()
+        : id_("%JOB_ID%")
+        , type_(JobType::Custom)
+    {
+    }
+
+    explicit %JOB_NAME%Job(const std::string& id, JobType type = JobType::Custom)
+        : id_(id)
+        , type_(type)
+    {
+    }
+
+    ~%JOB_NAME%Job() override = default;
+
+    std::string id() const noexcept override {
+        return id_;
+    }
+
+    std::string name() const noexcept {
+        return "%JOB_NAME%";
+    }
+
+    JobType type() const noexcept override {
+        return type_;
+    }
+
+    JobState state() const noexcept override {
+        return state_;
+    }
+
+    Result<void> prepare(JobContext& context) override {
+        if (state_ != JobState::Pending) {
+            return Result<void>::Error(ErrorCode::JobInvalidState);
+        }
+        state_ = JobState::Preparing;
+        context.logger->debug("Job", "Preparing " + id_);
+
+        state_ = JobState::Pending;
+        return Result<void>::Ok();
+    }
+
+    Result<void> execute(JobContext& context) override {
+        if (state_ != JobState::Pending) {
+            return Result<void>::Error(ErrorCode::JobInvalidState);
+        }
+
+        state_ = JobState::Running;
+        startTime_ = std::chrono::steady_clock::now();
+        result_.statistics.startTime = startTime_;
+
+        context.logger->info("Job", "Starting " + id_);
+
+        progress_.isIndeterminate = false;
+        progress_.currentOperation = "%JOB_OPERATION%";
+        progress_.totalBytes = %TOTAL_BYTES%;
+        progress_.cancelable = true;
+
+        constexpr uint64_t chunkSize = %CHUNK_SIZE%;
+        uint64_t processed = 0;
+
+        while (processed < progress_.totalBytes) {
+            if (cancelled_.load()) {
+                state_ = JobState::Cancelled;
+                result_.success = false;
+                result_.error = ErrorCode::JobCancelled;
+                result_.errorMessage = "Job cancelled by user";
+                return Result<void>::Error(ErrorCode::JobCancelled);
+            }
+
+            if (context.isCancelled()) {
+                state_ = JobState::Cancelled;
+                result_.success = false;
+                result_.error = ErrorCode::JobCancelled;
+                result_.errorMessage = "Job cancelled by context";
+                return Result<void>::Error(ErrorCode::JobCancelled);
+            }
+
+            uint64_t remaining = progress_.totalBytes - processed;
+            uint64_t thisChunk = std::min(chunkSize, remaining);
+
+            auto writeResult = processChunk(context, processed, thisChunk);
+            if (writeResult.isError()) {
+                state_ = JobState::Failed;
+                result_.success = false;
+                result_.error = writeResult.error();
+                result_.errorMessage = "Chunk processing failed at offset " + std::to_string(processed);
+                result_.statistics.endTime = std::chrono::steady_clock::now();
+                return writeResult;
+            }
+
+            processed += thisChunk;
+            progress_.transferredBytes = processed;
+            progress_.percentage = static_cast<double>(processed) /
+                static_cast<double>(progress_.totalBytes) * 100.0;
+
+            auto now = std::chrono::steady_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                now - startTime_);
+            if (elapsed.count() > 0) {
+                progress_.speedBps = static_cast<double>(processed) /
+                    (static_cast<double>(elapsed.count()) / 1000.0);
+                if (progress_.speedBps > 0.0) {
+                    progress_.estimatedSeconds =
+                        static_cast<double>(progress_.totalBytes - processed) / progress_.speedBps;
+                }
+            }
+
+            if (context.progressCallback) {
+                context.progressCallback(id_, progress_);
+            }
+        }
+
+        auto endTime = std::chrono::steady_clock::now();
+        result_.statistics.endTime = endTime;
+        result_.statistics.elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+            endTime - startTime_);
+        result_.statistics.processedBytes = processed;
+        result_.success = true;
+        state_ = JobState::Completed;
+
+        context.logger->info("Job", "Completed " + id_);
+        return Result<void>::Ok();
+    }
+
+    Result<void> rollback(JobContext& context) override {
+        if (!canRollback()) {
+            return Result<void>::Error(ErrorCode::JobRollbackFailed);
+        }
+        state_ = JobState::RollingBack;
+        context.logger->warn("Job", "Rolling back " + id_);
+
+        state_ = JobState::RolledBack;
+        return Result<void>::Ok();
+    }
+
+    Result<void> cancel() noexcept override {
+        cancelled_ = true;
+        if (state_ == JobState::Running || state_ == JobState::Pending) {
+            state_ = JobState::Cancelled;
+        }
+        return Result<void>::Ok();
+    }
+
+    ProgressInfo progress() const noexcept override {
+        return progress_;
+    }
+
+    JobResult result() const noexcept override {
+        return result_;
+    }
+
+    void setRecoveryPolicy(std::unique_ptr<RecoveryPolicy> policy) override {
+        recoveryPolicy_ = std::move(policy);
+    }
+
+    RecoveryPolicy* recoveryPolicy() const noexcept override {
+        return recoveryPolicy_.get();
+    }
+
+    void setConfig(const JobConfig& config) override {
+        config_ = config;
+    }
+
+    const JobConfig& config() const noexcept override {
+        return config_;
+    }
+
+    bool canRollback() const noexcept override {
+        return state_ == JobState::Completed || state_ == JobState::Failed;
+    }
+
+private:
+    Result<void> processChunk(JobContext& context, uint64_t offset, uint64_t size) {
+        return Result<void>::Ok();
+    }
+
+    std::string id_;
+    JobType type_;
+    std::atomic<JobState> state_{JobState::Pending};
+    std::unique_ptr<RecoveryPolicy> recoveryPolicy_;
+    JobConfig config_;
+    ProgressInfo progress_;
+    JobResult result_;
+    std::atomic<bool> cancelled_{false};
+    std::chrono::steady_clock::time_point startTime_;
+};
+
+extern "C" {
+PLUGIN_EXPORT IJob* createJob() {
+    return new %JOB_NAME%Job();
+}
+
+PLUGIN_EXPORT void destroyJob(IJob* job) {
+    delete job;
+}
+
+PLUGIN_EXPORT uint32_t pluginVersion() {
+    return 1;
+}
+}

@@ -1,0 +1,213 @@
+#include <mbootcore/workflow/IWorkflow.hpp>
+#include <mbootcore/workflow/WorkflowTypes.hpp>
+#include <mbootcore/domain/Error.hpp>
+
+#include <string>
+#include <vector>
+#include <atomic>
+#include <chrono>
+#include <algorithm>
+
+using namespace mbootcore;
+using namespace mbootcore::workflow;
+
+#if defined(_WIN32)
+#  define PLUGIN_EXPORT __declspec(dllexport)
+#else
+#  define PLUGIN_EXPORT __attribute__((visibility("default")))
+#endif
+
+class %WORKFLOW_NAME%Workflow final : public IWorkflow {
+public:
+    %WORKFLOW_NAME%Workflow() = default;
+    ~%WORKFLOW_NAME%Workflow() override = default;
+
+    std::string name() const noexcept {
+        return "%WORKFLOW_NAME%";
+    }
+
+    Result<void> prepare() override {
+        if (state_ != WorkflowState::Created) {
+            return Result<void>::Error(ErrorCode::WorkflowInvalidState);
+        }
+        state_ = WorkflowState::Ready;
+        return Result<void>::Ok();
+    }
+
+    Result<void> run() override {
+        if (state_ != WorkflowState::Ready) {
+            return Result<void>::Error(ErrorCode::WorkflowInvalidState);
+        }
+
+        state_ = WorkflowState::Running;
+        stats_.startTime = std::chrono::steady_clock::now();
+        progress_.currentStep = "%STEP_1_NAME%";
+
+        for (size_t i = 0; i < steps_.size(); ++i) {
+            if (cancelled_.load()) {
+                state_ = WorkflowState::Cancelled;
+                return Result<void>::Error(ErrorCode::WorkflowCancelled);
+            }
+
+            const auto& step = steps_[i];
+            progress_.currentStep = step;
+            progress_.currentStepProgress = 0.0;
+
+            auto stepResult = executeStep(i);
+            if (stepResult.isError()) {
+                stats_.errors++;
+                stats_.finishTime = std::chrono::steady_clock::now();
+                result_.success = false;
+                result_.error = stepResult.error();
+                result_.message = "Step failed: " + step;
+                state_ = WorkflowState::Failed;
+                return stepResult;
+            }
+
+            progress_.overallProgress =
+                static_cast<double>(i + 1) / static_cast<double>(steps_.size()) * 100.0;
+        }
+
+        stats_.finishTime = std::chrono::steady_clock::now();
+        stats_.elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+            stats_.finishTime - stats_.startTime);
+        result_.success = true;
+        state_ = WorkflowState::Completed;
+        progress_.overallProgress = 100.0;
+        return Result<void>::Ok();
+    }
+
+    Result<void> pause() override {
+        if (state_ != WorkflowState::Running) {
+            return Result<void>::Error(ErrorCode::WorkflowInvalidState);
+        }
+        state_ = WorkflowState::Paused;
+        return Result<void>::Ok();
+    }
+
+    Result<void> resume() override {
+        if (state_ != WorkflowState::Paused) {
+            return Result<void>::Error(ErrorCode::WorkflowInvalidState);
+        }
+        state_ = WorkflowState::Running;
+        return Result<void>::Ok();
+    }
+
+    void cancel() noexcept override {
+        cancelled_ = true;
+        state_ = WorkflowState::Cancelled;
+    }
+
+    Result<void> rollback() override {
+        state_ = WorkflowState::RollingBack;
+        for (auto it = steps_.rbegin(); it != steps_.rend(); ++it) {
+            auto rollbackResult = rollbackStep(*it);
+            if (rollbackResult.isError()) {
+                state_ = WorkflowState::Failed;
+                return rollbackResult;
+            }
+        }
+        state_ = WorkflowState::Ready;
+        return Result<void>::Ok();
+    }
+
+    Result<void> reset() override {
+        cancelled_ = false;
+        state_ = WorkflowState::Created;
+        progress_ = WorkflowProgress{};
+        result_ = WorkflowResult{};
+        stats_ = WorkflowStatistics{};
+        return Result<void>::Ok();
+    }
+
+    WorkflowProgress progress() const noexcept override {
+        return progress_;
+    }
+
+    WorkflowResult result() const noexcept override {
+        return result_;
+    }
+
+    WorkflowStatistics statistics() const noexcept override {
+        return stats_;
+    }
+
+    std::vector<std::string> history() const override {
+        return history_;
+    }
+
+    WorkflowState state() const noexcept override {
+        return state_;
+    }
+
+    std::string stateString() const override {
+        switch (state_) {
+            case WorkflowState::Created:     return "Created";
+            case WorkflowState::Ready:       return "Ready";
+            case WorkflowState::Running:     return "Running";
+            case WorkflowState::Paused:      return "Paused";
+            case WorkflowState::Cancelled:   return "Cancelled";
+            case WorkflowState::Completed:   return "Completed";
+            case WorkflowState::Failed:      return "Failed";
+            case WorkflowState::RollingBack: return "RollingBack";
+            default:                          return "Unknown";
+        }
+    }
+
+    void setContext(WorkflowContext ctx) override {
+        context_ = std::move(ctx);
+    }
+
+    WorkflowContext& context() noexcept override {
+        return context_;
+    }
+
+    const WorkflowContext& context() const noexcept override {
+        return context_;
+    }
+
+    void setOptions(const WorkflowOptions& options) override {
+        options_ = options;
+    }
+
+    const WorkflowOptions& options() const noexcept override {
+        return options_;
+    }
+
+private:
+    Result<void> executeStep(size_t index) {
+        history_.push_back("Executing: " + steps_[index]);
+        return Result<void>::Ok();
+    }
+
+    Result<void> rollbackStep(const std::string& step) {
+        history_.push_back("Rolling back: " + step);
+        return Result<void>::Ok();
+    }
+
+    WorkflowState state_{WorkflowState::Created};
+    WorkflowProgress progress_;
+    WorkflowResult result_;
+    WorkflowStatistics stats_;
+    WorkflowContext context_;
+    WorkflowOptions options_;
+    std::atomic<bool> cancelled_{false};
+    std::vector<std::string> steps_{
+        "%STEP_1_NAME%", "%STEP_2_NAME%", "%STEP_3_NAME%"
+    };
+    std::vector<std::string> history_;
+};
+
+extern "C" {
+PLUGIN_EXPORT IWorkflow* createWorkflow() {
+    return new %WORKFLOW_NAME%Workflow();
+}
+
+PLUGIN_EXPORT void destroyWorkflow(IWorkflow* workflow) {
+    delete workflow;
+}
+
+PLUGIN_EXPORT uint32_t pluginVersion() {
+    return 1;
+}
+}
