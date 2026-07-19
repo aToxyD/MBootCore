@@ -1,4 +1,5 @@
 #include "mbootcore/elf/VirtualProgrammer.hpp"
+#include "common/NumericUtils.hpp"
 
 #include <algorithm>
 
@@ -37,7 +38,7 @@ void VirtualProgrammer::setProgressCallback(ProgrammerProgressCallback callback)
 ProgrammerProgress VirtualProgrammer::progress() const {
     ProgrammerProgress p;
     p.state = m_state.load();
-    p.bytesTransferred = m_loadedImage ? m_loadedImage->totalFileSize : 0;
+    p.bytesTransferred = m_loadedImage ? numeric::checked_cast<size_t>(m_loadedImage->totalFileSize) : 0;
     p.totalBytes = p.bytesTransferred;
     return p;
 }
@@ -49,7 +50,7 @@ Result<void> VirtualProgrammer::loadImage(const MemoryImage& image) {
     }
 
     m_loadedImage = std::make_unique<MemoryImage>(image);
-    updateProgress(ProgrammerState::ImageLoaded, 0, image.totalFileSize);
+    updateProgress(ProgrammerState::ImageLoaded, 0, numeric::checked_cast<size_t>(image.totalFileSize));
     return {};
 }
 
@@ -64,7 +65,7 @@ Result<void> VirtualProgrammer::verifyImage() {
         return ErrorCode::InvalidElf;
     }
 
-    updateProgress(ProgrammerState::ImageVerified, 0, m_loadedImage->totalFileSize);
+    updateProgress(ProgrammerState::ImageVerified, 0, numeric::checked_cast<size_t>(m_loadedImage->totalFileSize));
     return {};
 }
 
@@ -79,7 +80,7 @@ Result<void> VirtualProgrammer::prepareExecution() {
         return ErrorCode::InvalidElf;
     }
 
-    updateProgress(ProgrammerState::TransferReady, 0, m_loadedImage->totalFileSize);
+    updateProgress(ProgrammerState::TransferReady, 0, numeric::checked_cast<size_t>(m_loadedImage->totalFileSize));
     return {};
 }
 
@@ -94,7 +95,7 @@ Result<void> VirtualProgrammer::transferImage() {
         return ErrorCode::TransportTimeout;
     }
 
-    updateProgress(ProgrammerState::Transferring, 0, m_loadedImage->totalFileSize);
+    updateProgress(ProgrammerState::Transferring, 0, numeric::checked_cast<size_t>(m_loadedImage->totalFileSize));
 
     size_t total = static_cast<size_t>(m_loadedImage->totalFileSize);
     size_t transferred = 0;
@@ -135,8 +136,8 @@ Result<void> VirtualProgrammer::startExecution() {
     }
 
     m_executed = true;
-    updateProgress(ProgrammerState::Completed, m_loadedImage->totalFileSize,
-                   m_loadedImage->totalFileSize);
+    updateProgress(ProgrammerState::Completed, numeric::checked_cast<size_t>(m_loadedImage->totalFileSize),
+                   numeric::checked_cast<size_t>(m_loadedImage->totalFileSize));
     return {};
 }
 
