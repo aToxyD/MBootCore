@@ -1,4 +1,5 @@
 #include "mbootcore/elf/ElfParser.hpp"
+#include "platform/ByteSwap.hpp"
 
 #include <cstring>
 #include <algorithm>
@@ -22,7 +23,7 @@ uint16_t ElfParser::readU16(const uint8_t* p, ElfEndian endian) noexcept {
     uint16_t val;
     std::memcpy(&val, p, sizeof(val));
     if (endian == ElfEndian::Big) {
-        val = __builtin_bswap16(val);
+        val = platform::byteswap(val);
     }
     return val;
 }
@@ -31,7 +32,7 @@ uint32_t ElfParser::readU32(const uint8_t* p, ElfEndian endian) noexcept {
     uint32_t val;
     std::memcpy(&val, p, sizeof(val));
     if (endian == ElfEndian::Big) {
-        val = __builtin_bswap32(val);
+        val = platform::byteswap(val);
     }
     return val;
 }
@@ -40,7 +41,7 @@ uint64_t ElfParser::readU64(const uint8_t* p, ElfEndian endian) noexcept {
     uint64_t val;
     std::memcpy(&val, p, sizeof(val));
     if (endian == ElfEndian::Big) {
-        val = __builtin_bswap64(val);
+        val = platform::byteswap(val);
     }
     return val;
 }
