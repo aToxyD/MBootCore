@@ -77,7 +77,7 @@ private:
     std::unique_ptr<LoaderFramework> m_loaderFramework;
     std::unique_ptr<firmware::FirmwarePackage> m_loadedPackage;
     firmware::FirmwarePackage* m_loadedPackageRaw{nullptr};
-    ILogger& m_logger;
+    [[maybe_unused]] ILogger& m_logger;
     IDeviceService& m_deviceService;
     workflow::WorkflowFactory& m_workflowFactory;
     WorkflowExecutor m_workflowExec;

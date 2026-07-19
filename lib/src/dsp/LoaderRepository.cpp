@@ -211,8 +211,8 @@ int LoaderMatcher::scoreLoader(const DSPLoaderMetadata& loader, const ChipsetId&
     return score;
 }
 
-LoaderResolver::LoaderResolver(const LoaderDatabase& db, const LoaderMatcher& matcher)
-    : m_db(db), m_matcher(matcher) {}
+LoaderResolver::LoaderResolver(const LoaderMatcher& matcher)
+    : m_matcher(matcher) {}
 
 LoaderResolver::ResolvedLoader LoaderResolver::resolve(
     const ChipsetId& chipset, ProtocolType protocol, BootMode mode) const {

@@ -71,7 +71,7 @@ public:
 private:
     uint16_t m_vendorId, m_productId;
     int m_interfaceNumber, m_bulkInEp, m_bulkOutEp;
-    ILogger* m_logger;
+    [[maybe_unused]] ILogger* m_logger;
     TransportConfig m_config;
     TransportStatistics m_stats;
     TransportState m_state{TransportState::Closed};

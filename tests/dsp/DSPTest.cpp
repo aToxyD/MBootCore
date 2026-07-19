@@ -497,7 +497,7 @@ SECTION("testResolverEmpty") {
 
     LoaderDatabase db(repo);
     LoaderMatcher matcher(db);
-    LoaderResolver resolver(db, matcher);
+    LoaderResolver resolver(matcher);
 
     auto resolved = resolver.resolve({"Qualcomm", "SM", "8250"});
     REQUIRE(resolved.primary == nullptr);

@@ -43,7 +43,7 @@ private:
     std::unique_ptr<plugin::PluginManager> m_pluginManager;
     std::unique_ptr<plugin::PluginContext> m_pluginContext;
     std::unique_ptr<vendor::VendorRuntime> m_vendorRuntime;
-    ILogger& m_logger;
+    [[maybe_unused]] ILogger& m_logger;
 };
 
 } // namespace runtime

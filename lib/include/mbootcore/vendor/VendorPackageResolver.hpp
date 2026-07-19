@@ -34,7 +34,7 @@ public:
     Result<std::vector<std::string>> resolveFlashingSequence(const std::string& vendorId);
 
 private:
-    const VendorContext& m_context;
+    [[maybe_unused]] const VendorContext& m_context;
 };
 
 } // namespace vendor

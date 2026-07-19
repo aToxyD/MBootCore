@@ -45,7 +45,7 @@ public:
 
 private:
     ITransport& m_transport;
-    ILogger& m_logger;
+    [[maybe_unused]] ILogger& m_logger;
     SaharaProtocol m_protocol;
     bool m_open{false};
 };

@@ -64,7 +64,6 @@ private:
     std::atomic<bool> m_cancelled{false};
     uint32_t m_negotiatedVersion{0};
     DeviceInfo m_deviceInfo{};
-    bool m_v2DiscoveryAttempted{false};
 };
 
 } // namespace mbootcore

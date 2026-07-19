@@ -51,7 +51,7 @@ private:
     std::unique_ptr<pipeline::BootPipeline> m_bootPipeline;
     std::unique_ptr<workflow::IWorkflow> m_currentWorkflow;
 
-    ILogger& m_logger;
+    [[maybe_unused]] ILogger& m_logger;
     IDeviceService& m_deviceService;
     IFirmwareService& m_firmwareService;
 };

@@ -74,7 +74,7 @@ private:
 
 class LoaderResolver {
 public:
-    explicit LoaderResolver(const LoaderDatabase& db, const LoaderMatcher& matcher);
+    explicit LoaderResolver(const LoaderMatcher& matcher);
 
     struct ResolvedLoader {
         const DSPLoaderMetadata* primary{nullptr};
@@ -86,7 +86,6 @@ public:
         discovery::BootMode mode = discovery::BootMode::Unknown) const;
 
 private:
-    const LoaderDatabase& m_db;
     const LoaderMatcher& m_matcher;
 };
 

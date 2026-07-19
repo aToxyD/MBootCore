@@ -85,7 +85,6 @@ private:
     std::atomic<std::size_t> m_totalCompleted{0};
     std::atomic<std::size_t> m_totalFailed{0};
     std::atomic<std::size_t> m_totalCancelled{0};
-    std::size_t m_activeCount{0};
 
     void updateCounters();
 };
