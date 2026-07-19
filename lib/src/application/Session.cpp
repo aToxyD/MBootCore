@@ -15,7 +15,7 @@ Session::Session(Config config)
     , m_logger(std::make_unique<ConsoleLogger>())
     , m_loaderManager(std::make_unique<LoaderManager>(*m_logger)) {}
 
-Session::~Session() { disconnect(); }
+Session::~Session() noexcept { disconnect(); }
 
 void Session::setLogger(std::unique_ptr<ILogger> logger) {
     m_logger = std::move(logger);

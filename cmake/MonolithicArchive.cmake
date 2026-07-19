@@ -11,7 +11,7 @@
 #   mbootcore_create_monolithic_archive(mbootcore zlibstatic tfpsacrypto usb-1.0)
 #
 # Platform tools:
-#   MSVC:     lib.exe /OUT: (CMAKE_LIBTOOL or lib.exe auto-detected)
+#   MSVC:     lib.exe /OUT: (CMAKE_AR or lib.exe auto-detected)
 #   macOS:    libtool -static
 #   Linux:    ar x + ar qS + ranlib (each dep extracted to separate dir)
 #   MinGW:    ar x + ar qS + ranlib (same as Linux)
@@ -42,11 +42,14 @@ function(mbootcore_create_monolithic_archive TARGET)
     # MSVC: lib.exe /OUT: merges archives natively
     # -------------------------------------------------------------------
     if(MSVC)
-        # Find the MSVC librarian.  CMAKE_LIBTOOL is the preferred path
-        # (set by Visual Studio generators).  Fall back to CMAKE_AR which
-        # is usually lib.exe on MSVC but is NOT guaranteed.
+        # Find the MSVC librarian.
+        # Prefer CMAKE_AR when provided by the active toolchain.
+        # CMAKE_LIBTOOL is retained as a manual override for non-standard
+        # environments. find_program() is the final fallback.
         set(_lib_tool "")
-        if(CMAKE_LIBTOOL)
+        if(CMAKE_AR)
+            set(_lib_tool "${CMAKE_AR}")
+        elseif(CMAKE_LIBTOOL)
             set(_lib_tool "${CMAKE_LIBTOOL}")
         else()
             # Try to locate lib.exe from the Visual Studio environment
@@ -64,7 +67,7 @@ function(mbootcore_create_monolithic_archive TARGET)
         if(NOT _lib_tool)
             message(FATAL_ERROR
                 "mbootcore_create_monolithic_archive: MSVC lib.exe not found. "
-                "Set CMAKE_LIBTOOL or ensure Visual Studio environment is active."
+                "Set CMAKE_AR or ensure Visual Studio environment is active."
             )
         endif()
 
