@@ -1,5 +1,6 @@
 #include <mbootcore/vendor/VendorMonitor.hpp>
 #include <algorithm>
+#include "common/NumericUtils.hpp"
 
 namespace mbootcore {
 namespace vendor {
@@ -77,14 +78,14 @@ void VendorMonitor::clearAll() {
 size_t VendorMonitor::totalSessions() const noexcept {
     std::lock_guard<std::mutex> lock(m_mutex);
     size_t total = 0;
-    for (const auto& [id, s] : m_stats) total += s.successfulSessions + s.failedSessions;
+    for (const auto& [id, s] : m_stats) total += numeric::checked_cast<size_t>(s.successfulSessions + s.failedSessions);
     return total;
 }
 
 size_t VendorMonitor::totalFailures() const noexcept {
     std::lock_guard<std::mutex> lock(m_mutex);
     size_t total = 0;
-    for (const auto& [id, s] : m_stats) total += s.failedSessions;
+    for (const auto& [id, s] : m_stats) total += numeric::checked_cast<size_t>(s.failedSessions);
     return total;
 }
 

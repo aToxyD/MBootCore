@@ -3,6 +3,7 @@
 #include <cstring>
 #include <algorithm>
 #include <limits>
+#include "common/NumericUtils.hpp"
 
 namespace mbootcore {
 namespace gpt {
@@ -90,7 +91,7 @@ ByteBuffer GPTParser::readSectors(uint64_t lba, uint64_t count) {
     if (!safeMul(lba, m_layout.sectorSize, byteOffset)) {
         return ByteBuffer{};
     }
-    auto result = m_device.readMemory(byteOffset, bytes);
+    auto result = m_device.readMemory(byteOffset, numeric::checked_cast<size_t>(bytes));
     if (result.isError()) return ByteBuffer{};
     return result.value();
 }
@@ -187,7 +188,7 @@ std::vector<PartitionEntry> GPTParser::readEntries(const ByteBuffer& data,
                                                      uint64_t count,
                                                      uint64_t entrySize) {
     std::vector<PartitionEntry> entries;
-    entries.reserve(count);
+    entries.reserve(numeric::checked_cast<size_t>(count));
 
     auto readLE16 = [&](size_t off) -> uint16_t {
         if (off + 1 >= data.size()) return 0;

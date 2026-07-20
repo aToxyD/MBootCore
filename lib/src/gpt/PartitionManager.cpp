@@ -1,6 +1,7 @@
 #include "mbootcore/gpt/PartitionManager.hpp"
 #include <algorithm>
 #include <limits>
+#include "common/NumericUtils.hpp"
 
 namespace mbootcore {
 namespace gpt {
@@ -138,7 +139,7 @@ size_t PartitionManager::partitionCount() const noexcept {
 Result<ByteBuffer> PartitionManager::readPartition(const std::string& name) {
     MBOOT_TRY_ASSIGN(info, findByName(name));
 
-    return m_device.readMemory(info.byteOffset, info.byteLength);
+    return m_device.readMemory(info.byteOffset, numeric::checked_cast<size_t>(info.byteLength));
 }
 
 Result<void> PartitionManager::writePartition(const std::string& name,
@@ -155,13 +156,13 @@ Result<void> PartitionManager::writePartition(const std::string& name,
 Result<void> PartitionManager::erasePartition(const std::string& name) {
     MBOOT_TRY_ASSIGN(info, findByName(name));
 
-    return m_device.eraseMemory(info.byteOffset, info.byteLength);
+    return m_device.eraseMemory(info.byteOffset, numeric::checked_cast<size_t>(info.byteLength));
 }
 
 Result<void> PartitionManager::trimPartition(const std::string& name) {
     MBOOT_TRY_ASSIGN(info, findByName(name));
 
-    return m_device.eraseMemory(info.byteOffset, info.byteLength);
+    return m_device.eraseMemory(info.byteOffset, numeric::checked_cast<size_t>(info.byteLength));
 }
 
 Result<ByteBuffer> PartitionManager::backupPartition(const std::string& name) {

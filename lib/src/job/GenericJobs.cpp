@@ -1,6 +1,7 @@
 #include <mbootcore/job/GenericJobs.hpp>
 #include <mbootcore/generic/IFlashDevice.hpp>
 #include <mbootcore/gpt/PartitionManager.hpp>
+#include "common/NumericUtils.hpp"
 
 namespace mbootcore {
 namespace job {
@@ -424,7 +425,7 @@ Result<void> GPTUpdateJob::execute(JobContext& context) {
                                   ? storageInfo.value().sectorSize : 512;
             uint64_t gptSize = (34 + 128 * 128 / sectorSize) * sectorSize;
 
-            auto primaryResult = context.flashDevice->readMemory(0, gptSize);
+            auto primaryResult = context.flashDevice->readMemory(0, numeric::checked_cast<size_t>(gptSize));
             if (primaryResult) {
                 m_originalPrimary = std::move(primaryResult.value());
                 m_backedUp = true;
@@ -432,7 +433,7 @@ Result<void> GPTUpdateJob::execute(JobContext& context) {
 
             auto lastLba = storageInfo.value().numSectors - 1;
             uint64_t backupOffset = (lastLba - 33) * sectorSize;
-            auto backupResult = context.flashDevice->readMemory(backupOffset, gptSize);
+            auto backupResult = context.flashDevice->readMemory(backupOffset, numeric::checked_cast<size_t>(gptSize));
             if (backupResult.isOk()) {
                 m_originalBackup = std::move(backupResult.value());
             }
