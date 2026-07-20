@@ -3,6 +3,7 @@
 #include <cstring>
 #include <algorithm>
 #include <limits>
+#include "common/NumericUtils.hpp"
 
 namespace mbootcore {
 namespace gpt {
@@ -125,7 +126,7 @@ ByteBuffer GPTWriter::serializeEntries(const std::vector<PartitionEntry>& entrie
 
     for (uint64_t i = 0; i < count && i < entries.size(); ++i) {
         size_t offset = static_cast<size_t>(i * entrySize);
-        const auto& e = entries[i];
+        const auto& e = entries[numeric::checked_cast<size_t>(i)];
 
         writeLE32(offset, e.partitionTypeGUID.data1);
         writeLE16(offset + 4, e.partitionTypeGUID.data2);

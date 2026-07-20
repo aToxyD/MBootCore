@@ -259,7 +259,7 @@ uint32_t GPTParser::computeEntryCRC32(const std::vector<PartitionEntry>& entries
         uint64_t offset64 = 0;
         if (!safeMul(i, entrySize, offset64)) break;
         size_t offset = static_cast<size_t>(offset64);
-        const auto& e = entries[i];
+        const auto& e = entries[numeric::checked_cast<size_t>(i)];
         auto writeLE32 = [&](size_t off, uint32_t val) {
             raw[off]       = static_cast<uint8_t>(val);
             raw[off + 1]   = static_cast<uint8_t>(val >> 8);
