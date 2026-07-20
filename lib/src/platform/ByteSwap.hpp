@@ -9,7 +9,7 @@
 namespace mbootcore {
 namespace platform {
 
-inline constexpr uint16_t byteswap(uint16_t value) noexcept {
+inline uint16_t byteswap(uint16_t value) noexcept {
 #ifdef _MSC_VER
     return _byteswap_ushort(value);
 #else
@@ -17,7 +17,7 @@ inline constexpr uint16_t byteswap(uint16_t value) noexcept {
 #endif
 }
 
-inline constexpr uint32_t byteswap(uint32_t value) noexcept {
+inline uint32_t byteswap(uint32_t value) noexcept {
 #ifdef _MSC_VER
     return _byteswap_ulong(value);
 #else
@@ -25,7 +25,7 @@ inline constexpr uint32_t byteswap(uint32_t value) noexcept {
 #endif
 }
 
-inline constexpr uint64_t byteswap(uint64_t value) noexcept {
+inline uint64_t byteswap(uint64_t value) noexcept {
 #ifdef _MSC_VER
     return _byteswap_uint64(value);
 #else
