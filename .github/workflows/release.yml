@@ -211,6 +211,7 @@ jobs:
           cmake --preset ${{ matrix.preset }}
           ${{ matrix.msvc_arch && format('-A {0}', matrix.msvc_arch) || '' }}
           ${{ matrix.cross && format('-DCMAKE_TOOLCHAIN_FILE={0}', matrix.toolchain) || '' }}
+          -DMBOOTCORE_BUILD_STUDIO=OFF
 
       # ── Build ────────────────────────────────────────
       - name: Build
