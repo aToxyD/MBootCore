@@ -237,53 +237,29 @@ jobs:
             -DMBOOTCORE_SOURCE_DIR="${GITHUB_WORKSPACE}" \
             -P release/CiSdkStaging.cmake
 
-      # ── Package Runtime ──────────────────────────────
-      - name: Package runtime
+      # ── Package ────────────────────────────────────────
+      - name: Package
         shell: bash
         run: |
-          PKG="MBootCore-${VERSION}-${{ matrix.id }}-runtime"
+          PKG="MBootCore-${VERSION}-${{ matrix.id }}"
+          test -d _install || {
+            echo "::error::_install directory not found"
+            exit 1
+          }
           mkdir -p "${PKG}"
-          cp -r _install/bin "${PKG}/" 2>/dev/null || true
-          mkdir -p "${PKG}/lib"
-          cp _install/lib/libmbootcore.* "${PKG}/lib/" 2>/dev/null || \
-          cp _install/lib/mbootcore.*   "${PKG}/lib/" 2>/dev/null || true
-          cp LICENSE NOTICE ThirdPartyLicenses.md "${PKG}/"
+          cp -a _install/. "${PKG}/"
           if [ "${{ runner.os }}" = "Windows" ]; then
             7z a "${PKG}.zip" "${PKG}"
           else
             tar czf "${PKG}.tar.gz" "${PKG}"
           fi
 
-      # ── Package SDK ──────────────────────────────────
-      - name: Package SDK
-        shell: bash
-        run: |
-          PKG="MBootCore-${VERSION}-${{ matrix.id }}-sdk"
-          mkdir -p "${PKG}"
-          cp -r _install/include "${PKG}/"
-          mkdir -p "${PKG}/lib/cmake"
-          cp -r _install/lib/cmake/MBootCore "${PKG}/lib/cmake/"
-          cp _install/SDK_INFO.json "${PKG}/" 2>/dev/null || true
-          cp LICENSE NOTICE ThirdPartyLicenses.md "${PKG}/"
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            7z a "${PKG}.zip" "${PKG}"
-          else
-            tar czf "${PKG}.tar.gz" "${PKG}"
-          fi
-
-      # ── Upload artifacts ─────────────────────────────
-      - name: Upload runtime package
+      # ── Upload artifact ────────────────────────────
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.id }}-runtime
-          path: MBootCore-${{ env.VERSION }}-${{ matrix.id }}-runtime.*
-          if-no-files-found: error
-
-      - name: Upload SDK package
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.id }}-sdk
-          path: MBootCore-${{ env.VERSION }}-${{ matrix.id }}-sdk.*
+          name: ${{ matrix.id }}
+          path: MBootCore-${{ env.VERSION }}-${{ matrix.id }}.*
           if-no-files-found: error
 
   # ════════════════════════════════════════════════════════════════
@@ -306,13 +282,13 @@ jobs:
         run: |
           COUNT=$(find artifacts -type f \( -name "*.tar.gz" -o -name "*.zip" \) | wc -l)
           echo "Found ${COUNT} packages"
-          if [ "${COUNT}" -ne 20 ]; then
-            echo "::error::Expected 20 packages, found ${COUNT}"
+          if [ "${COUNT}" -ne 10 ]; then
+            echo "::error::Expected 10 packages, found ${COUNT}"
             find artifacts -type f \( -name "*.tar.gz" -o -name "*.zip" \) \
               -exec basename {} \; | sort
             exit 1
           fi
-          echo "All 20 packages verified:"
+          echo "All 10 packages verified:"
           find artifacts -type f \( -name "*.tar.gz" -o -name "*.zip" \) \
             -exec basename {} \; | sort
 
