@@ -247,7 +247,7 @@ jobs:
           mkdir -p "${PKG}/lib"
           cp _install/lib/libmbootcore.* "${PKG}/lib/" 2>/dev/null || \
           cp _install/lib/mbootcore.*   "${PKG}/lib/" 2>/dev/null || true
-          cp LICENSE NOTICE ThirdPartyLicenses.md README.md "${PKG}/"
+          cp LICENSE NOTICE ThirdPartyLicenses.md "${PKG}/"
           if [ "${{ runner.os }}" = "Windows" ]; then
             7z a "${PKG}.zip" "${PKG}"
           else
@@ -263,8 +263,8 @@ jobs:
           cp -r _install/include "${PKG}/"
           mkdir -p "${PKG}/lib/cmake"
           cp -r _install/lib/cmake/MBootCore "${PKG}/lib/cmake/"
-          cp _install/share/doc/MBootCore/SDK_INFO.json "${PKG}/" 2>/dev/null || true
-          cp LICENSE NOTICE ThirdPartyLicenses.md README.md "${PKG}/"
+          cp _install/SDK_INFO.json "${PKG}/" 2>/dev/null || true
+          cp LICENSE NOTICE ThirdPartyLicenses.md "${PKG}/"
           if [ "${{ runner.os }}" = "Windows" ]; then
             7z a "${PKG}.zip" "${PKG}"
           else
