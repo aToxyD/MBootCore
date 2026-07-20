@@ -60,10 +60,14 @@ EnvironmentChecker::EnvironmentReport EnvironmentChecker::check() const {
     OSVERSIONINFOA osvi;
     ZeroMemory(&osvi, sizeof(osvi));
     osvi.dwOSVersionInfoSize = sizeof(osvi);
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4996)
+#endif
     if (GetVersionExA(&osvi)) {
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
         report.osVersion = std::to_string(osvi.dwMajorVersion) + "." + std::to_string(osvi.dwMinorVersion);
     } else {
         report.osVersion = "unknown";
