@@ -221,6 +221,22 @@ jobs:
       - name: Install
         run: cmake --install "${{ matrix.build_dir }}" --config Release --prefix _install
 
+      # ── Generate SDK metadata ────────────────────────
+      - name: Generate SDK metadata
+        shell: bash
+        run: |
+          P="${{ matrix.id }}"
+          P="${P%-x64}"; P="${P%-arm64}"; P="${P%-x86}"
+          P="${P/appleclang/clang}"
+          cmake \
+            -DBUILD_DIR="${{ matrix.build_dir }}" \
+            -DSTAGING_DIR=_install \
+            -DSDK_PLATFORM="${P}" \
+            -DSDK_ARCH="${{ matrix.arch }}" \
+            -DMBOOTCORE_VERSION="${VERSION}" \
+            -DMBOOTCORE_SOURCE_DIR="${GITHUB_WORKSPACE}" \
+            -P release/CiSdkStaging.cmake
+
       # ── Package Runtime ──────────────────────────────
       - name: Package runtime
         shell: bash
