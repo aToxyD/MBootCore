@@ -269,17 +269,20 @@
 
         {
             "name": "release-package-msvc-x86",
-            "configurePreset": "release-package-msvc-x86"
+            "configurePreset": "release-package-msvc-x86",
+            "configuration": "Release"
         },
 
         {
             "name": "release-package-msvc-x64",
-            "configurePreset": "release-package-msvc-x64"
+            "configurePreset": "release-package-msvc-x64",
+            "configuration": "Release"
         },
 
         {
             "name": "release-package-msvc-arm64",
-            "configurePreset": "release-package-msvc-arm64"
+            "configurePreset": "release-package-msvc-arm64",
+            "configuration": "Release"
         },
 
         {
