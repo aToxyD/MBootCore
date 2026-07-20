@@ -37,7 +37,8 @@ static CommandType COMMAND_TYPES[] = {
 
 CommandType CliParser::resolveCommand(const std::string& name) const {
     auto lower = name;
-    std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+    std::transform(lower.begin(), lower.end(), lower.begin(),
+        [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
     for (int i = 0; COMMAND_STRINGS[i] != nullptr; ++i) {
         if (lower == COMMAND_STRINGS[i]) return COMMAND_TYPES[i];
     }
