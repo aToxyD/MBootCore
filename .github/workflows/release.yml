@@ -150,14 +150,14 @@ jobs:
           # ── macOS ──────────────────────────────────────
           - id: macos-appleclang-x64
             name: "macOS Intel x64"
-            runner: macos-13
+            runner: macos-15-intel
             preset: release-package-macos-x64
             build_dir: build/release-package-macos-x64
             arch: x64
 
           - id: macos-appleclang-arm64
             name: "macOS ARM64"
-            runner: macos-14
+            runner: macos-15
             preset: release-package-macos-arm64
             build_dir: build/release-package-macos-arm64
             arch: arm64
