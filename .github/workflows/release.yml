@@ -218,7 +218,7 @@ jobs:
 
       # ── Install ──────────────────────────────────────
       - name: Install
-        run: cmake --install "${{ matrix.build_dir }}" --prefix _install
+        run: cmake --install "${{ matrix.build_dir }}" --config Release --prefix _install
 
       # ── Package Runtime ──────────────────────────────
       - name: Package runtime
