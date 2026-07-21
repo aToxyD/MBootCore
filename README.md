@@ -67,8 +67,8 @@ Start at **[docs/README.md](docs/README.md)** — covers architecture, protocols
 
 ### Vendor Documentation
 
-- **[Vendor Maturity Model](docs/vendor/VENDOR_MATURITY.md)** — Formal maturity states with measurable exit criteria
-- **[Graduation Checklists](docs/vendor/VENDOR_GRADUATION.md)** — Per-vendor checklist from current state to Production
-- **[Hardware Validation](docs/vendor/HARDWARE_VALIDATION.md)** — Hardware test framework and process
-- **[Golden Vector Policy](docs/vendor/GOLDEN_VECTOR_POLICY.md)** — Vector creation, maintenance, and validation rules
-- **[Scaffold Philosophy](docs/vendor/SCAFFOLD_PHILOSOPHY.md)** — Why MediaTek and UNISOC remain Scaffold
+- **[Vendor Maturity Model](docs/vendor/MaturityModel.md)** — Formal maturity states with measurable exit criteria
+- **[Graduation Checklists](docs/vendor/Graduation.md)** — Per-vendor checklist from current state to Production
+- **[Hardware Validation](docs/vendor/HardwareValidation.md)** — Hardware test framework and process
+- **[Golden Vector Policy](docs/vendor/GoldenVectorPolicy.md)** — Vector creation, maintenance, and validation rules
+- **[Scaffold Philosophy](docs/vendor/ScaffoldPhilosophy.md)** — Why MediaTek and UNISOC remain Scaffold

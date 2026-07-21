@@ -159,9 +159,9 @@ Follow the documented maturity model:
 2. **Preview** — real hardware validation locally
 3. **Production** — full state machines, golden vectors, hardware test suite
 
-See [docs/vendor/VENDOR_MATURITY.md](docs/vendor/VENDOR_MATURITY.md) for
+See [docs/vendor/MaturityModel.md](../vendor/MaturityModel.md) for
 measurable exit criteria and
-[docs/vendor/VENDOR_GRADUATION.md](docs/vendor/VENDOR_GRADUATION.md) for
+[docs/vendor/Graduation.md](../vendor/Graduation.md) for
 per-vendor graduation checklists.
 
 ## Extension Policy

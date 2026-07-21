@@ -125,11 +125,11 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 
 | Document | Description |
 |----------|-------------|
-| [Vendor Maturity](vendor/VENDOR_MATURITY.md) | Formal maturity model with four states and exit criteria |
-| [Vendor Graduation](vendor/VENDOR_GRADUATION.md) | Per-vendor graduation checklists |
-| [Hardware Validation](vendor/HARDWARE_VALIDATION.md) | Hardware testing framework |
-| [Golden Vector Policy](vendor/GOLDEN_VECTOR_POLICY.md) | Golden vector creation and maintenance rules |
-| [Scaffold Philosophy](vendor/SCAFFOLD_PHILOSOPHY.md) | Why MediaTek and UNISOC remain Scaffold |
+| [Vendor Maturity](vendor/MaturityModel.md) | Formal maturity model with four states and exit criteria |
+| [Vendor Graduation](vendor/Graduation.md) | Per-vendor graduation checklists |
+| [Hardware Validation](vendor/HardwareValidation.md) | Hardware testing framework |
+| [Golden Vector Policy](vendor/GoldenVectorPolicy.md) | Golden vector creation and maintenance rules |
+| [Scaffold Philosophy](vendor/ScaffoldPhilosophy.md) | Why MediaTek and UNISOC remain Scaffold |
 
 ## Recommended Reading Order
 
