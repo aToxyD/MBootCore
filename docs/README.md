@@ -24,7 +24,9 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 
 | Document | Description |
 |----------|-------------|
-| [Architecture](architecture/Overview.md) | Full architecture description — start here |
+| [Installation](getting-started/Installation.md) | Platform-specific setup instructions |
+| [Quick Start](getting-started/QuickStart.md) | Get running in 5 minutes |
+| [Architecture](architecture/Overview.md) | Full architecture description |
 | [Build Guide](build/Build.md) | Build system, CMake options, dependencies |
 | [SDK API](sdk/Overview.md) | Public API reference |
 
