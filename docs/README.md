@@ -153,6 +153,11 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 
 | Document | Description |
 |----------|-------------|
+| [Glossary](reference/Glossary.md) | Terminology definitions |
+| [CLI Reference](reference/CLIReference.md) | Command and option reference |
+| [Error Codes](reference/ErrorCodes.md) | All error codes from Error.hpp |
+| [Config Reference](reference/ConfigReference.md) | All configuration keys from ConfigTypes.hpp |
+| [Environment Variables](reference/EnvironmentVariables.md) | Environment variable reference |
 | [Third-Party Licenses](reference/ThirdPartyLicenses.md) | Dependency license notices |
 
 ### Internal
