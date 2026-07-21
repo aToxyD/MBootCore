@@ -26,7 +26,6 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 |----------|-------------|
 | [Installation](getting-started/Installation.md) | Platform-specific setup instructions |
 | [Quick Start](getting-started/QuickStart.md) | Get running in 5 minutes |
-| [Architecture](architecture/Overview.md) | Full architecture description |
 | [Build Guide](build/Build.md) | Build system, CMake options, dependencies |
 | [SDK API](sdk/Overview.md) | Public API reference |
 
@@ -47,6 +46,7 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | [GPT Engine](architecture/GPT.md) | GUID Partition Table management |
 | [Design Decisions](architecture/DesignDecisions.md) | Architectural rationale |
 | [Security Architecture](architecture/Security.md) | Security subsystem design |
+| [Security Policy](security/SecurityPolicy.md) | Security policy and guidelines |
 | [Network Address](architecture/NetworkAddress.md) | Network address value type |
 | [Build Pipeline](architecture/BuildPipeline.md) | Build system architecture |
 
@@ -170,9 +170,11 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 
 ## Recommended Reading Order
 
-1. [Architecture](architecture/Overview.md) — understand the system
-2. [Design Decisions](architecture/DesignDecisions.md) — understand the philosophy
-3. [Sahara Protocol](architecture/Sahara.md) or [Firehose Protocol](architecture/Firehose.md) — protocol details
-4. [Boot Flow](specifications/BootFlow.md) — how it all connects
-5. [Plugin System](architecture/PluginSystem.md) — how to extend
-6. [Build Guide](build/Build.md) — how to build
+1. [Installation](getting-started/Installation.md) — set up your environment
+2. [Quick Start](getting-started/QuickStart.md) — build and run in 5 minutes
+3. [Architecture](architecture/Overview.md) — understand the system
+4. [Design Decisions](architecture/DesignDecisions.md) — understand the philosophy
+5. [Sahara Protocol](architecture/Sahara.md) or [Firehose Protocol](architecture/Firehose.md) — protocol details
+6. [Boot Flow](specifications/BootFlow.md) — how it all connects
+7. [Plugin System](architecture/PluginSystem.md) — how to extend
+8. [Build Guide](build/Build.md) — build options and configuration
