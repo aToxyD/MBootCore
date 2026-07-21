@@ -186,7 +186,7 @@ endif()
 find_package(Doxygen QUIET)
 if(DOXYGEN_FOUND)
     configure_file(
-        ${CMAKE_SOURCE_DIR}/docs/Doxyfile.in
+        ${CMAKE_SOURCE_DIR}/docs/api/Doxyfile.in
         ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
         @ONLY
     )

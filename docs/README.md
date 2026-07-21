@@ -51,8 +51,8 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | Document | Description |
 |----------|-------------|
 | [Protocols](specifications/Protocols.md) | Protocol comparison and transport model |
-| [Boot Flow](specifications/Boot-Flow.md) | End-to-end boot sequence |
-| [File Formats](specifications/File-Formats.md) | Binary format specifications |
+| [Boot Flow](specifications/BootFlow.md) | End-to-end boot sequence |
+| [File Formats](specifications/FileFormats.md) | Binary format specifications |
 
 ### Build
 
@@ -136,6 +136,6 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 1. [Architecture](architecture/Overview.md) — understand the system
 2. [Design Decisions](architecture/DesignDecisions.md) — understand the philosophy
 3. [Sahara Protocol](architecture/Sahara.md) or [Firehose Protocol](architecture/Firehose.md) — protocol details
-4. [Boot Flow](specifications/Boot-Flow.md) — how it all connects
+4. [Boot Flow](specifications/BootFlow.md) — how it all connects
 5. [Plugin System](architecture/PluginSystem.md) — how to extend
 6. [Build Guide](build/Build.md) — how to build
