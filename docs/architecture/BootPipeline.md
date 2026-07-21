@@ -198,3 +198,8 @@ auto pipeline = BootPipelineFactory::createFromDescriptor(descriptor);
 auto pipeline = std::make_unique<BootPipeline>(config);
 pipeline->setHandler(Stage::Connect, myConnectHandler);
 ```
+
+## See Also
+
+- [Overview](Overview.md) — architecture layer diagram
+- [Plugin System](PluginSystem.md) — extension points and stage handlers

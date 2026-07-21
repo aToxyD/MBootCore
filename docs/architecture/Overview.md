@@ -340,3 +340,10 @@ The following are intentionally outside the scope of MBootCore:
 - Reverse engineering utilities
 - Vendor-specific hacking tools
 - Package manager or OS-level flashing tool
+
+## See Also
+
+- [Device Discovery](DeviceDiscovery.md) — confidence scoring, registry design
+- [Firmware Package Format](FirmwarePackage.md) — JSON manifest specification
+- [Security](Security.md) — crypto provider architecture
+- [Design Decisions](DesignDecisions.md) — rationale for key architectural choices

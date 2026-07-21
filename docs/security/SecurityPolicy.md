@@ -142,3 +142,8 @@ signature verification via Mbed TLS.
   `Runtime → FirmwareValidator → Security Interfaces → MbedTLS Provider`
 - `Result<T>` boundary is preserved: all Mbed TLS failures are converted
   to error codes, never exceptions.
+
+## See Also
+
+- [Security](../architecture/Security.md) — crypto provider architecture overview
+- [Security Testing](../testing/SecurityTesting.md) — sanitizer and fuzzing infrastructure

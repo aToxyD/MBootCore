@@ -194,3 +194,9 @@ LBA −34:  Last Usable LBA
 LBA −33–2: Backup Partition Entries (32 sectors)
 LBA −1:   Backup GPT Header (512 bytes)
 ```
+
+## See Also
+
+- [Generic Flash](GenericFlash.md) — flash device abstraction
+- [Firmware Package](FirmwarePackage.md) — package format with GPT update support
+- [Overview](Overview.md) — architecture layer diagram

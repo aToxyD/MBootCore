@@ -88,3 +88,9 @@ cmake .. -DMBOOTCORE_ENABLE_CRYPTO=OFF
 
 Mbed TLS v4.2 is auto-downloaded by the dependency manager, SHA256-verified,
 and statically built. No host Perl or system crypto library installation required.
+
+## See Also
+
+- [Security Policy](../security/SecurityPolicy.md) — crypto configuration and build flags
+- [Security Testing](../testing/SecurityTesting.md) — sanitizer and fuzzing infrastructure
+- [Security Audit Report](../internal/SecurityAuditReport.md) — arithmetic hardening findings

@@ -238,3 +238,8 @@ checklist.
 ---
 
 Thank you for contributing to MBootCore.
+
+## See Also
+
+- [Thread Safety](ThreadSafety.md) — threading model and synchronization
+- [Coding Standards](CodingStandards.md) — code style rules (pointer to AGENTS.md §6)

@@ -265,3 +265,9 @@ MBootCore maps NAK responses to typed error codes (10 Firehose-specific error co
 | ChunkEngine | `core/protocols/firehose/` | Reusable chunk transfer |
 | FlashContext | `core/protocols/firehose/` | Storage configuration context |
 | FirehoseAdapter | `generic/adapter/` | Bridge to IFlashDevice |
+
+## See Also
+
+- [Sahara Protocol](Sahara.md) — companion protocol for Qualcomm EDL mode
+- [Generic Flash](GenericFlash.md) — protocol-agnostic flash operations
+- [Overview](Overview.md) — architecture layer diagram

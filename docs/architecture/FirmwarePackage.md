@@ -193,3 +193,8 @@ Virtual test infrastructure:
 | XOR hash for integrity | Zero-dependency checksum, extensible to SHA256 |
 | `ValidationError` struct with context | Enables precise error reporting to users |
 | Executor bridges to Job Engine | Reuses existing FlashJob/VerifyJob/EraseJob/GPTUpdateJob |
+
+## See Also
+
+- [Overview](Overview.md) — architecture layer diagram
+- [GPT Partition Manager](GPT.md) — partition table operations

@@ -61,3 +61,4 @@ ctest --output-on-failure -j$(nproc)
 - [Build Options](../build/BuildOptions.md) — all CMake flags
 - [Architecture](../architecture/Overview.md) — understand the system
 - [Plugin Development](../sdk/PluginDevelopment.md) — extend MBootCore
+- [Virtual Devices](../testing/VirtualDevices.md) — test without hardware

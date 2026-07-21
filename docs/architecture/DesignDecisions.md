@@ -105,3 +105,9 @@ All third-party dependencies (zlib, Mbed TLS, libusb, SDK) are merged into `libm
 **Why not separate archives**: Consumer burden is unacceptable. A framework requiring five `find_package` calls before `target_link_libraries` is not production-ready.
 
 The monolithic archive pattern is the result of evaluating multiple alternatives. Separate libraries burden consumers with locating each dependency individually. Shared libraries are unsuitable for embedded and low-level target environments. Header-only inclusion creates maintenance burden. The OBJECT + STATIC wrapper pattern with post-build archive merge provides a single consumer integration point while preserving clean install-tree guarantees.
+
+## See Also
+
+- [Architecture Overview](Overview.md) — layer diagram and dependency rules
+- [Build Pipeline](BuildPipeline.md) — CMake build structure
+- [Build Options](../build/BuildOptions.md) — all CMake flags

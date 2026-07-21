@@ -38,6 +38,11 @@ Switch views via the View menu, toolbar, or keyboard shortcuts:
 
 Additional views (no shortcut): Log Viewer, Diagnostics, Developer Tools.
 
+## Settings
+
+Open via **View → Settings** (Ctrl+,). Configure application preferences including
+theme, logging level, device timeouts, and transport defaults.
+
 ## Status Bar
 
 | Label | Meaning |

@@ -105,3 +105,8 @@ When physical hardware is available:
 2. Connect device in appropriate boot mode
 3. Run `ctest -L Hardware` — tests execute against real device
 4. Review results and update hardware test documentation
+
+## See Also
+
+- [Virtual Devices](VirtualDevices.md) — test without physical hardware
+- [Security Testing](SecurityTesting.md) — sanitizer and fuzzing infrastructure

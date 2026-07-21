@@ -143,3 +143,9 @@ The ELF Engine is used by:
 - **LoaderFramework::ElfInspector** — header inspection for loader matching
 - **FirehoseAdapter** — parse programmer ELF for upload
 - **Boot Pipeline** — Stage 3 (ELF Parsing) and Stage 4 (Programmer Upload)
+
+## See Also
+
+- [Firehose Protocol](Firehose.md) — protocol that uses ELF programmer files
+- [Loader Framework](LoaderFramework.md) — loader matching and ELF inspection
+- [Overview](Overview.md) — architecture layer diagram

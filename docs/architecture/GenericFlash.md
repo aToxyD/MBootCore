@@ -166,3 +166,9 @@ Adding support for a new protocol requires:
 5. Register with discovery protocol registry
 
 No changes to the generic layer interfaces are required.
+
+## See Also
+
+- [Sahara Protocol](Sahara.md) — Sahara flash device implementation
+- [Firehose Protocol](Firehose.md) — Firehose flash device implementation
+- [Overview](Overview.md) — architecture layer diagram

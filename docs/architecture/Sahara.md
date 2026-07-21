@@ -140,3 +140,9 @@ The Sahara implementation in MBootCore consists of:
 
 All 19 packet types are supported with round-trip serialization/parsing verified through golden vector tests. Fuzz testing validates robustness against 500+ random and corrupt inputs.
 
+## See Also
+
+- [Firehose Protocol](Firehose.md) — companion protocol for Qualcomm flashing
+- [Device Discovery](DeviceDiscovery.md) — protocol detection and confidence scoring
+- [Overview](Overview.md) — architecture layer diagram
+
