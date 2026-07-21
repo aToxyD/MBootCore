@@ -89,6 +89,7 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | Document | Description |
 |----------|-------------|
 | [Contributing](developer/Contributing.md) | Contribution guidelines |
+| [Coding Standards](developer/CodingStandards.md) | Summary of coding standards (see AGENTS.md §6) |
 | [Thread Safety](developer/ThreadSafety.md) | Concurrency model |
 
 ### SDK
