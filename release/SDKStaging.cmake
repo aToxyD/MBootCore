@@ -191,11 +191,74 @@ Generated:    ${_build_date}
 This SDK was built from the MBootCore project and includes:
   - Compiled libraries (lib/)
   - Public headers (include/)
-  - Documentation (docs/)
+  - Documentation
   - License files (LICENSE, NOTICE, ThirdPartyLicenses.md)
 
 For build instructions, see the documentation.
 ")
+
+# ═══════════════════════════════════════════════════════════════════════════
+# README.md — strip repository-only sections for installed package
+# ═══════════════════════════════════════════════════════════════════════════
+
+set(_readme_file "${_docs_dir}/README.md")
+if(IS_FILE "${_readme_file}")
+    file(READ "${_readme_file}" _readme_content)
+
+    # Pre-check: markers must exist
+    if(NOT _readme_content MATCHES "<!-- INSTALL_REMOVE_BEGIN -->" OR
+       NOT _readme_content MATCHES "<!-- INSTALL_REMOVE_END -->")
+        message(FATAL_ERROR
+            "SDKStaging: README markers not found.")
+    endif()
+
+    # State machine: strip marked sections line by line
+    string(REPLACE "\n" ";" _lines "${_readme_content}")
+    set(_result "")
+    set(_skip OFF)
+    foreach(_line IN LISTS _lines)
+        if("${_line}" MATCHES "<!-- INSTALL_REMOVE_BEGIN -->")
+            set(_skip ON)
+        elseif("${_line}" MATCHES "<!-- INSTALL_REMOVE_END -->")
+            set(_skip OFF)
+        elseif(NOT _skip)
+            if(_result)
+                string(APPEND _result "\n")
+            endif()
+            string(APPEND _result "${_line}")
+        endif()
+    endforeach()
+
+    # Post-check 1: markers removed
+    if(_result MATCHES "<!-- INSTALL_REMOVE_BEGIN -->" OR
+       _result MATCHES "<!-- INSTALL_REMOVE_END -->")
+        message(FATAL_ERROR
+            "SDKStaging: README preprocessing failed.")
+    endif()
+
+    # Post-check 2: no broken links
+    if(_result MATCHES "\\.\\./examples/" OR
+       _result MATCHES "internal/AGENTS\\.md")
+        message(FATAL_ERROR
+            "SDKStaging: Repository-only links remain in installed README.")
+    endif()
+
+    # Append Source Repository section
+    string(APPEND _result
+        "\n### Source Repository\n\n"
+        "This SDK package contains the public documentation required to use MBootCore.\n\n"
+        "Additional resources—including source code, examples, development guides, and\n"
+        "internal engineering documentation—are available in the MBootCore source\n"
+        "repository.\n")
+
+    # Post-check 3: Source Repository added
+    if(NOT _result MATCHES "### Source Repository")
+        message(FATAL_ERROR
+            "SDKStaging: Source Repository section was not added.")
+    endif()
+
+    file(WRITE "${_readme_file}" "${_result}")
+endif()
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Done

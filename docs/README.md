@@ -123,6 +123,7 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | [Golden Vector Policy](vendor/GoldenVectorPolicy.md) | Golden vector creation and maintenance rules |
 | [Scaffold Philosophy](vendor/ScaffoldPhilosophy.md) | Why MediaTek and UNISOC remain Scaffold |
 
+<!-- INSTALL_REMOVE_BEGIN -->
 ### Examples
 
 | Example | Description |
@@ -142,6 +143,7 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | [custom_vendor](../examples/custom_vendor) | Custom vendor registration |
 | [sdk](../examples/sdk/) | SDK plugin examples (vendor, protocol, workflow, package, discovery) |
 | [dynamic](../examples/dynamic/) | Dynamic plugin loading examples |
+<!-- INSTALL_REMOVE_END -->
 
 ### Project
 
@@ -162,11 +164,13 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | [Environment Variables](reference/EnvironmentVariables.md) | Environment variable reference |
 | [Third-Party Licenses](reference/ThirdPartyLicenses.md) | Dependency license notices |
 
+<!-- INSTALL_REMOVE_BEGIN -->
 ### Internal
 
 | Document | Description |
 |----------|-------------|
 | [AGENTS.md](internal/AGENTS.md) | Project constitution, coding standards, review criteria |
+<!-- INSTALL_REMOVE_END -->
 
 ## Recommended Reading Order
 
