@@ -145,7 +145,9 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 
 | Document | Description |
 |----------|-------------|
+| [Overview](project/Overview.md) | Project overview for new contributors |
 | [Change Log](project/ChangeLog.md) | Release history |
+| [Release Process](project/ReleaseProcess.md) | Release creation and verification |
 
 ### Reference
 
