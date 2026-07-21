@@ -14,7 +14,7 @@ return `NotSupported`.
 
 Security operations use interface-based dependency injection:
 
-```
+```txt
 Consumer → ISignatureVerifier → NotSupportedSignatureVerifier (default)
                                 → MbedTLSSignatureVerifier
 

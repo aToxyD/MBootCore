@@ -54,7 +54,7 @@ disconnect
 | `plugin` | `plugin` | List loaded plugins |
 | `vendor` | `vendor` | List registered vendors |
 | `session` | `session` | Show session status |
-| `statistics` | `statistics` | Show runtime statistics |
+| `statistics` / `stats` | `statistics` | Show runtime statistics |
 | `health` | `health` | Show system health |
 
 ## Dry Run

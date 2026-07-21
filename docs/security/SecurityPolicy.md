@@ -40,7 +40,7 @@ a real cryptographic backend is available via Mbed TLS v4.2.
 
 ### Provider Architecture
 
-```
+```txt
 Runtime / FirmwareValidator
         |
         v
@@ -91,13 +91,13 @@ cmake .. -DMBOOTCORE_ENABLE_CRYPTO=OFF
 
 When crypto is enabled, the configure summary shows:
 
-```
+```txt
 Crypto support: ENABLED (mbedtls-4.2.0)
 ```
 
 When disabled:
 
-```
+```txt
 Crypto support: DISABLED (MBOOTCORE_ENABLE_CRYPTO=OFF)
 ```
 

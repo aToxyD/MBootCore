@@ -33,7 +33,7 @@ Scaffold implementations: MediaTek BROM, UNISOC FDL.
 
 ## 3. Layer Diagram
 
-```
+```txt
 Application Layer        ---  Session, CLI (mboot-cli), GUI (mboot-studio)
     |
 Service Layer            ---  Pipeline, Job, Workflow, Plugin
@@ -252,7 +252,7 @@ Scaffold implementations are extensibility demonstrations. They prove the archit
 
 The core library ships as a single monolithic static archive:
 
-```
+```txt
 mbootcore_objects (OBJECT)       -- compilation: all sources, defs, includes, warnings
        |
 mbootcore (STATIC)               -- assembly + export: zero link dependencies

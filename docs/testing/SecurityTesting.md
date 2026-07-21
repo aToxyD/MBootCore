@@ -5,7 +5,7 @@ including sanitizer support, parser regression corpus, fuzz harnesses,
 and robustness regression tests.
 
 **Security Audit Complete (2026-07-16):** Full arithmetic hardening audit
-of all binary parsers. See `docs/testing/SecurityAuditReport.md` for
+of all binary parsers. See `docs/internal/SecurityAuditReport.md` for
 detailed findings, fixes, and exclusions.
 
 ---
@@ -118,8 +118,8 @@ TSAN_OPTIONS=halt_on_error=1:second_deadlock_stack=1
 
 | Compiler | ASan | UBSan | TSan |
 |----------|------|-------|------|
-| GCC 8+   | Yes  | Yes   | Yes  |
-| Clang 6+ | Yes  | Yes   | Yes  |
+| GCC 11+  | Yes  | Yes   | Yes  |
+| Clang 15+| Yes  | Yes   | Yes  |
 | MSVC     | ASan only | No | No |
 
 Sanitizers are silently ignored on unsupported compilers.
@@ -329,7 +329,7 @@ Use libFuzzer's `minimize` flag:
 - [ ] Fuzz harnesses compile on Clang
 - [x] Security tests run locally before release tagging
 - [x] Documentation is current
-- [x] Security audit completed (2026-07-16) — see `docs/testing/SecurityAuditReport.md`
+- [x] Security audit completed (2026-07-16) — see `docs/internal/SecurityAuditReport.md`
 
 ---
 
