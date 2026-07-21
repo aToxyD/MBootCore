@@ -69,7 +69,7 @@ built-in dependency manager:
 - **Offline builds:** Pass `-DMBOOTCORE_OFFLINE_BUILD=ON` to fail with guidance
   if a dependency is not already cached.
 
-See [cmake/DependencyManager.cmake](../../cmake/DependencyManager.cmake) for
+See `cmake/DependencyManager.cmake` in the source repository for
 the full implementation.
 
 ## Build Configuration

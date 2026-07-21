@@ -150,6 +150,19 @@ if [[ -n "$PACKAGE_DIR" ]]; then
             check "19+ SDK headers" false "include/sdk/ not found"
         fi
 
+        # Check documentation
+        section "Documentation"
+
+        if [[ -d "$VERIFY_ROOT/share/doc/MBootCore" ]]; then
+            check "Documentation README" test -f "$VERIFY_ROOT/share/doc/MBootCore/README.md"
+            check "getting-started/"     test -d "$VERIFY_ROOT/share/doc/MBootCore/getting-started"
+            check "user-guide/"          test -d "$VERIFY_ROOT/share/doc/MBootCore/user-guide"
+            check "architecture/"        test -d "$VERIFY_ROOT/share/doc/MBootCore/architecture"
+            check "reference/"           test -d "$VERIFY_ROOT/share/doc/MBootCore/reference"
+        else
+            check "Documentation installed" false "share/doc/MBootCore/ not found"
+        fi
+
         # CMake config content check
         section "CMake Config Content"
 
