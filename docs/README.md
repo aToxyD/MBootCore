@@ -78,6 +78,8 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 
 | Document | Description |
 |----------|-------------|
+| [CLI Guide](user-guide/CLI.md) | Command-line tool usage and workflows |
+| [MBoot Studio](user-guide/Studio.md) | GUI application guide |
 | [Configuration](user-guide/Configuration.md) | Configuration system |
 | [Logging](user-guide/Logging.md) | Structured logging |
 | [Diagnostics](user-guide/Diagnostics.md) | Profiling, memory tracking, fault injection |
