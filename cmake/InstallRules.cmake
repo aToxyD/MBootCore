@@ -33,7 +33,7 @@ endfunction()
 
 function(install_mbootcore_docs)
     install(DIRECTORY ${CMAKE_SOURCE_DIR}/docs/
-        DESTINATION ${CMAKE_INSTALL_DOCDIR}/MBootCore
+        DESTINATION ${CMAKE_INSTALL_DOCDIR}
         PATTERN "internal" EXCLUDE
         PATTERN "api" EXCLUDE
         PATTERN "assets" EXCLUDE
