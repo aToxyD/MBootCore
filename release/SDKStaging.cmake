@@ -202,7 +202,7 @@ For build instructions, see the documentation.
 # ═══════════════════════════════════════════════════════════════════════════
 
 set(_readme_file "${_docs_dir}/README.md")
-if(IS_FILE "${_readme_file}")
+if(EXISTS "${_readme_file}" AND NOT IS_DIRECTORY "${_readme_file}")
     file(READ "${_readme_file}" _readme_content)
 
     # Pre-check: markers must exist
