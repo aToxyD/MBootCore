@@ -172,6 +172,7 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | [AGENTS.md](internal/AGENTS.md) | Project constitution, coding standards, review criteria |
 <!-- INSTALL_REMOVE_END -->
 
+<!-- INSTALL_REPLACE_BEGIN -->
 ## Recommended Reading Order
 
 1. [Installation](getting-started/Installation.md) — set up your environment
@@ -182,3 +183,4 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 6. [Boot Flow](specifications/BootFlow.md) — how it all connects
 7. [Plugin System](architecture/PluginSystem.md) — how to extend
 8. [Build Guide](build/Build.md) — build options and configuration
+<!-- INSTALL_REPLACE_END -->

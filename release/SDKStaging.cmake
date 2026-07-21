@@ -198,30 +198,57 @@ For build instructions, see the documentation.
 ")
 
 # ═══════════════════════════════════════════════════════════════════════════
-# README.md — strip repository-only sections for installed package
+# README.md — transform for installed SDK package
+#
+# Processing stages:
+#   1. State machine: strip INSTALL_REMOVE blocks, process INSTALL_REPLACE blocks
+#   2. Replace title (Documentation → SDK Documentation)
+#   3. Insert Installed Components + Start Here after Architecture Overview
+#   4. Replace Recommended Reading Order with SDK-focused order
+#   5. Append Source Repository section
+#   6. Verify: no markers, no broken links, all sections present
 # ═══════════════════════════════════════════════════════════════════════════
 
 set(_readme_file "${_docs_dir}/README.md")
 if(EXISTS "${_readme_file}" AND NOT IS_DIRECTORY "${_readme_file}")
     file(READ "${_readme_file}" _readme_content)
 
-    # Pre-check: markers must exist
+    # ── Pre-check: both marker types must exist ──
     if(NOT _readme_content MATCHES "<!-- INSTALL_REMOVE_BEGIN -->" OR
-       NOT _readme_content MATCHES "<!-- INSTALL_REMOVE_END -->")
+       NOT _readme_content MATCHES "<!-- INSTALL_REMOVE_END -->" OR
+       NOT _readme_content MATCHES "<!-- INSTALL_REPLACE_BEGIN -->" OR
+       NOT _readme_content MATCHES "<!-- INSTALL_REPLACE_END -->")
         message(FATAL_ERROR
-            "SDKStaging: README markers not found.")
+            "SDKStaging: README markers not found — "
+            "expected both INSTALL_REMOVE and INSTALL_REPLACE.")
     endif()
 
-    # State machine: strip marked sections line by line
+    # ── State machine: strip REMOVE blocks, process REPLACE blocks ──
+    set(_MODE_NORMAL  "normal")
+    set(_MODE_SKIP    "skip")
+    set(_MODE_REPLACE "replace")
+
     string(REPLACE "\n" ";" _lines "${_readme_content}")
     set(_result "")
-    set(_skip OFF)
+    set(_mode "${_MODE_NORMAL}")
     foreach(_line IN LISTS _lines)
-        if("${_line}" MATCHES "<!-- INSTALL_REMOVE_BEGIN -->")
-            set(_skip ON)
-        elseif("${_line}" MATCHES "<!-- INSTALL_REMOVE_END -->")
-            set(_skip OFF)
-        elseif(NOT _skip)
+        if("${_line}" STREQUAL "<!-- INSTALL_REMOVE_BEGIN -->")
+            set(_mode "${_MODE_SKIP}")
+        elseif("${_line}" STREQUAL "<!-- INSTALL_REMOVE_END -->")
+            set(_mode "${_MODE_NORMAL}")
+        elseif("${_line}" STREQUAL "<!-- INSTALL_REPLACE_BEGIN -->")
+            set(_mode "${_MODE_REPLACE}")
+        elseif("${_line}" STREQUAL "<!-- INSTALL_REPLACE_END -->")
+            set(_mode "${_MODE_NORMAL}")
+            string(APPEND _result "\n## Recommended Reading Order\n")
+            string(APPEND _result "\n1. [Installation](getting-started/Installation.md) — platform setup")
+            string(APPEND _result "\n2. [Quick Start](getting-started/QuickStart.md) — build and run in 5 minutes")
+            string(APPEND _result "\n3. [CLI Guide](user-guide/CLI.md) — command-line tool usage")
+            string(APPEND _result "\n4. [Configuration](user-guide/Configuration.md) — configuration system")
+            string(APPEND _result "\n5. [Architecture](architecture/Overview.md) — understand the system")
+            string(APPEND _result "\n6. [SDK Overview](sdk/Overview.md) — public API reference")
+            string(APPEND _result "\n7. [Plugin Development](sdk/PluginDevelopment.md) — extend MBootCore\n")
+        elseif("${_mode}" STREQUAL "normal")
             if(_result)
                 string(APPEND _result "\n")
             endif()
@@ -229,32 +256,90 @@ if(EXISTS "${_readme_file}" AND NOT IS_DIRECTORY "${_readme_file}")
         endif()
     endforeach()
 
-    # Post-check 1: markers removed
-    if(_result MATCHES "<!-- INSTALL_REMOVE_BEGIN -->" OR
-       _result MATCHES "<!-- INSTALL_REMOVE_END -->")
+    if(NOT _mode STREQUAL "${_MODE_NORMAL}")
         message(FATAL_ERROR
-            "SDKStaging: README preprocessing failed.")
+            "SDKStaging: Unterminated INSTALL marker block.")
     endif()
 
-    # Post-check 2: no broken links
+    # ── Phase 2: Title ──
+    string(REPLACE
+        "# MBootCore Documentation"
+        "# MBootCore SDK Documentation"
+        _result "${_result}")
+    if(NOT _result MATCHES "# MBootCore SDK Documentation")
+        message(FATAL_ERROR
+            "SDKStaging: Phase 2 failed — title not replaced.")
+    endif()
+
+    # ── Phase 3: Insert Installed Components + Start Here ──
+    string(REPLACE
+        "## Architecture Overview"
+        "## Installed Components\n\n"
+        "    include/              Public C++ headers\n"
+        "    lib/                  Libraries\n"
+        "    lib/cmake/MBootCore/  CMake package configuration\n"
+        "    bin/                  Command-line and optional GUI tools\n"
+        "    share/doc/MBootCore/  Documentation (this directory)\n"
+        "\n"
+        "## Start Here\n"
+        "\n"
+        "1. [Installation](getting-started/Installation.md) — platform setup\n"
+        "2. [Quick Start](getting-started/QuickStart.md) — build and run in 5 minutes\n"
+        "3. [CLI Guide](user-guide/CLI.md) — command-line tool usage\n"
+        "4. [Configuration](user-guide/Configuration.md) — configuration system\n"
+        "5. [Architecture Overview](architecture/Overview.md) — understand the system\n"
+        "6. [SDK Overview](sdk/Overview.md) — public API reference\n"
+        "7. [Plugin Development](sdk/PluginDevelopment.md) — extending MBootCore\n"
+        "\n"
+        "## Architecture Overview"
+        _result "${_result}")
+    if(NOT _result MATCHES "## Installed Components")
+        message(FATAL_ERROR
+            "SDKStaging: Phase 3 failed — Installed Components not inserted.")
+    endif()
+
+    # ── Phase 5: Append Source Repository ──
+    string(APPEND _result
+        "\n### Source Repository\n\n"
+        "This SDK package contains the public documentation required to use MBootCore.\n\n"
+        "Additional resources—including source code, examples, development guides, and\n"
+        "internal engineering documentation—are available in the MBootCore source\n"
+        "repository.\n\n"
+        "This documentation is fully self-contained for SDK users.\n")
+
+    # ── Phase 6: Verification ──
+    if(_result MATCHES "<!-- INSTALL_REMOVE_BEGIN -->" OR
+       _result MATCHES "<!-- INSTALL_REMOVE_END -->" OR
+       _result MATCHES "<!-- INSTALL_REPLACE_BEGIN -->" OR
+       _result MATCHES "<!-- INSTALL_REPLACE_END -->")
+        message(FATAL_ERROR
+            "SDKStaging: README preprocessing failed — markers remain.")
+    endif()
+
     if(_result MATCHES "\\.\\./examples/" OR
        _result MATCHES "internal/AGENTS\\.md")
         message(FATAL_ERROR
             "SDKStaging: Repository-only links remain in installed README.")
     endif()
 
-    # Append Source Repository section
-    string(APPEND _result
-        "\n### Source Repository\n\n"
-        "This SDK package contains the public documentation required to use MBootCore.\n\n"
-        "Additional resources—including source code, examples, development guides, and\n"
-        "internal engineering documentation—are available in the MBootCore source\n"
-        "repository.\n")
-
-    # Post-check 3: Source Repository added
     if(NOT _result MATCHES "### Source Repository")
         message(FATAL_ERROR
             "SDKStaging: Source Repository section was not added.")
+    endif()
+
+    if(NOT _result MATCHES "CLI Guide")
+        message(FATAL_ERROR
+            "SDKStaging: SDK reading order not inserted.")
+    endif()
+
+    if(NOT _result MATCHES "# MBootCore SDK Documentation")
+        message(FATAL_ERROR
+            "SDKStaging: Title not replaced.")
+    endif()
+
+    if(NOT _result MATCHES "## Installed Components")
+        message(FATAL_ERROR
+            "SDKStaging: Installed Components section missing.")
     endif()
 
     file(WRITE "${_readme_file}" "${_result}")
