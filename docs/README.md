@@ -24,7 +24,7 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 
 | Document | Description |
 |----------|-------------|
-| [Architecture](architecture/Architecture.md) | Full architecture description — start here |
+| [Architecture](architecture/Overview.md) | Full architecture description — start here |
 | [Build Guide](guides/Build.md) | Build system, CMake options, dependencies |
 | [SDK API](guides/SDK-API.md) | Public API reference |
 
@@ -35,15 +35,15 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | [Sahara Protocol](architecture/Sahara.md) | Sahara binary protocol implementation |
 | [Firehose Protocol](architecture/Firehose.md) | Firehose XML protocol implementation |
 | [Session Engine](architecture/Session.md) | Device session management |
-| [Boot Pipeline](architecture/Boot-Pipeline.md) | Boot stage orchestration |
-| [Device Discovery](architecture/Device-Discovery.md) | Device detection and protocol negotiation |
-| [Generic Flash Framework](architecture/Generic-Framework.md) | Protocol-agnostic flash abstraction |
-| [Loader Framework](architecture/Loader-Framework.md) | Boot programmer management |
-| [Firmware Package Engine](architecture/Firmware-Package.md) | Firmware packaging and execution |
-| [Plugin System](architecture/Plugin-System.md) | Extension framework |
+| [Boot Pipeline](architecture/BootPipeline.md) | Boot stage orchestration |
+| [Device Discovery](architecture/DeviceDiscovery.md) | Device detection and protocol negotiation |
+| [Generic Flash Framework](architecture/GenericFlash.md) | Protocol-agnostic flash abstraction |
+| [Loader Framework](architecture/LoaderFramework.md) | Boot programmer management |
+| [Firmware Package Engine](architecture/FirmwarePackage.md) | Firmware packaging and execution |
+| [Plugin System](architecture/PluginSystem.md) | Extension framework |
 | [ELF Engine](architecture/ELF.md) | ELF parsing and validation |
 | [GPT Engine](architecture/GPT.md) | GUID Partition Table management |
-| [Design Decisions](architecture/Design-Decisions.md) | Architectural rationale |
+| [Design Decisions](architecture/DesignDecisions.md) | Architectural rationale |
 | [Security Architecture](architecture/Security.md) | Security subsystem design |
 
 ### Specifications
@@ -113,9 +113,9 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 
 ## Recommended Reading Order
 
-1. [Architecture](architecture/Architecture.md) — understand the system
-2. [Design Decisions](architecture/Design-Decisions.md) — understand the philosophy
+1. [Architecture](architecture/Overview.md) — understand the system
+2. [Design Decisions](architecture/DesignDecisions.md) — understand the philosophy
 3. [Sahara Protocol](architecture/Sahara.md) or [Firehose Protocol](architecture/Firehose.md) — protocol details
 4. [Boot Flow](specifications/Boot-Flow.md) — how it all connects
-5. [Plugin System](architecture/Plugin-System.md) — how to extend
+5. [Plugin System](architecture/PluginSystem.md) — how to extend
 6. [Build Guide](guides/Build.md) — how to build
