@@ -64,7 +64,7 @@ cmake --build . -j4
 ## Usage
 
 Plugins are loaded statically via `PluginManager::load(unique_ptr<IPlugin>, PluginConfig)`.
-See `docs/guides/Plugin-Development.md` for the loading and lifecycle API.
+See `docs/sdk/PluginDevelopment.md` for the loading and lifecycle API.
 
 ```bash
 cmake --install . --prefix /path/to/your/app

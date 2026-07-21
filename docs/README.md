@@ -25,8 +25,8 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | Document | Description |
 |----------|-------------|
 | [Architecture](architecture/Overview.md) | Full architecture description — start here |
-| [Build Guide](guides/Build.md) | Build system, CMake options, dependencies |
-| [SDK API](guides/SDK-API.md) | Public API reference |
+| [Build Guide](build/Build.md) | Build system, CMake options, dependencies |
+| [SDK API](sdk/Overview.md) | Public API reference |
 
 ### Architecture
 
@@ -54,21 +54,41 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | [Boot Flow](specifications/Boot-Flow.md) | End-to-end boot sequence |
 | [File Formats](specifications/File-Formats.md) | Binary format specifications |
 
-### Guides
+### Build
 
 | Document | Description |
 |----------|-------------|
-| [Build Guide](guides/Build.md) | Build system, CMake options, dependencies |
-| [SDK API Reference](guides/SDK-API.md) | Public API reference |
-| [Testing](guides/Testing.md) | Test suite organization |
-| [Configuration](guides/Configuration.md) | Configuration system |
-| [Logging](guides/Logging.md) | Structured logging |
-| [Diagnostics](guides/Diagnostics.md) | Profiling, memory tracking, fault injection |
-| [Thread Safety](guides/Thread-Safety.md) | Concurrency model |
-| [Plugin Development](guides/Plugin-Development.md) | Creating plugins |
-| [Platform Support](guides/Platform-Support.md) | Supported platforms |
-| [Compiler Support](guides/Compiler-Support.md) | Toolchain requirements |
-| [Hardware Testing](guides/Hardware-Testing.md) | Hardware validation infrastructure |
+| [Build Guide](build/Build.md) | Build system, CMake options, dependencies |
+| [Compiler Support](build/CompilerSupport.md) | Toolchain requirements |
+| [Platform Support](build/PlatformSupport.md) | Supported platforms |
+
+### Testing
+
+| Document | Description |
+|----------|-------------|
+| [Testing](testing/Testing.md) | Test suite organization |
+| [Hardware Testing](testing/HardwareTesting.md) | Hardware validation infrastructure |
+
+### User Guide
+
+| Document | Description |
+|----------|-------------|
+| [Configuration](user-guide/Configuration.md) | Configuration system |
+| [Logging](user-guide/Logging.md) | Structured logging |
+| [Diagnostics](user-guide/Diagnostics.md) | Profiling, memory tracking, fault injection |
+
+### Developer
+
+| Document | Description |
+|----------|-------------|
+| [Thread Safety](developer/ThreadSafety.md) | Concurrency model |
+
+### SDK
+
+| Document | Description |
+|----------|-------------|
+| [Plugin Development](sdk/PluginDevelopment.md) | Creating plugins |
+| [SDK API Reference](sdk/Overview.md) | Public API reference |
 
 ### Examples
 
@@ -118,4 +138,4 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 3. [Sahara Protocol](architecture/Sahara.md) or [Firehose Protocol](architecture/Firehose.md) — protocol details
 4. [Boot Flow](specifications/Boot-Flow.md) — how it all connects
 5. [Plugin System](architecture/PluginSystem.md) — how to extend
-6. [Build Guide](guides/Build.md) — how to build
+6. [Build Guide](build/Build.md) — how to build

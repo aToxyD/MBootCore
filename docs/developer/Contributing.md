@@ -56,7 +56,7 @@ cmake --build --preset debug -j$(nproc)
 ctest --preset default --output-on-failure
 ```
 
-See [docs/guides/Build.md](docs/guides/Build.md) for full build instructions
+See [docs/build/Build.md](../build/Build.md) for full build instructions
 including platform-specific notes.
 
 ## CMake Presets
@@ -137,7 +137,7 @@ ctest --preset asan --output-on-failure              # under AddressSanitizer
 | `Security` | Parser robustness and crypto tests |
 | `Benchmark` | Performance benchmarks (not correctness) |
 
-See [docs/guides/Testing.md](docs/guides/Testing.md) for testing philosophy
+See [docs/testing/Testing.md](../testing/Testing.md) for testing philosophy
 and conventions.
 
 ## Adding a Protocol
@@ -147,7 +147,7 @@ and conventions.
 3. Register via the plugin system — no hardcoded branches
 4. Gate scaffold implementations behind `MBOOTCORE_ENABLE_VENDOR_SCAFFOLDS`
 
-See [docs/guides/Plugin-Development.md](docs/guides/Plugin-Development.md)
+See [docs/sdk/PluginDevelopment.md](../sdk/PluginDevelopment.md)
 for the full guide with code examples.
 
 ## Adding a Vendor

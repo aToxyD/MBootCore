@@ -85,7 +85,7 @@ per compiler and optionally enables warnings-as-errors (`-Werror` / `/WX`).
 | MSVC | `/W4 /permissive-` | `/WX` |
 
 Warnings-as-errors are controlled by `MBOOTCORE_WARNINGS_AS_ERRORS` (see
-[BUILD_OPTIONS.md](../../BUILD_OPTIONS.md)). Third-party dependencies are
+[BUILD_OPTIONS.md](../BUILD_OPTIONS.md)). Third-party dependencies are
 never affected.
 
 ## Feature Detection

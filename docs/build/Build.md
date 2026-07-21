@@ -76,7 +76,7 @@ the full implementation.
 
 ### CMake Options
 
-See [BUILD_OPTIONS.md](../../docs/BUILD_OPTIONS.md) for the complete list of
+See [BUILD_OPTIONS.md](../BUILD_OPTIONS.md) for the complete list of
 CMake options including the `MBOOTCORE_WARNINGS_AS_ERRORS` policy.
 
 
