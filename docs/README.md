@@ -47,6 +47,7 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | [GPT Engine](architecture/GPT.md) | GUID Partition Table management |
 | [Design Decisions](architecture/DesignDecisions.md) | Architectural rationale |
 | [Security Architecture](architecture/Security.md) | Security subsystem design |
+| [Network Address](architecture/NetworkAddress.md) | Network address value type |
 | [Build Pipeline](architecture/BuildPipeline.md) | Build system architecture |
 
 ### Specifications
@@ -71,6 +72,7 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | Document | Description |
 |----------|-------------|
 | [Testing](testing/Testing.md) | Test suite organization |
+| [Virtual Devices](testing/VirtualDevices.md) | Virtual device system for testing |
 | [Security Testing](testing/SecurityTesting.md) | Security test methodology and results |
 | [Hardware Testing](testing/HardwareTesting.md) | Hardware validation infrastructure |
 
