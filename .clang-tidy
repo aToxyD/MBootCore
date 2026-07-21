@@ -1,5 +1,5 @@
 # MBootCore .clang-tidy
-# See AGENTS.md §6 for coding standards.
+# See docs/internal/AGENTS.md §6 for coding standards.
 
 Checks: >
   bugprone-*,

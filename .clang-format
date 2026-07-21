@@ -1,6 +1,6 @@
 # MBootCore .clang-format
 # Based on Google style with project-specific overrides.
-# See AGENTS.md §6 for naming conventions.
+# See docs/internal/AGENTS.md §6 for naming conventions.
 
 BasedOnStyle: Google
 IndentWidth: 4

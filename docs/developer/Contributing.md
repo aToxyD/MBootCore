@@ -1,6 +1,6 @@
 # Contributing to MBootCore
 
-> Before opening a pull request, please read [AGENTS.md](AGENTS.md).
+> Before opening a pull request, please read [AGENTS.md](../internal/AGENTS.md).
 > It is the project constitution and defines all architectural rules,
 > coding standards, and review criteria.
 
@@ -15,8 +15,8 @@ Clean Architecture with strict layer separation. Key principles:
 - **RAII and move semantics** — no raw owning pointers
 - **No global state** — explicit dependency injection
 
-See [AGENTS.md §1](AGENTS.md#1-project-overview) and
-[§5 Design Rules](AGENTS.md#5-design-rules) for the full design philosophy.
+See [AGENTS.md §1](../internal/AGENTS.md#1-project-overview) and
+[§5 Design Rules](../internal/AGENTS.md#5-design-rules) for the full design philosophy.
 
 ## Architecture Stability
 
@@ -27,7 +27,7 @@ and maintainer approval.
 
 Key frozen areas include the transport layer API, Qt-free core library,
 runtime orchestration layering, protocol platform, and monolithic library
-distribution. See [AGENTS.md](AGENTS.md#4-architecture) for the full list.
+distribution. See [AGENTS.md](../internal/AGENTS.md#4-architecture) for the full list.
 
 ## Getting Started
 
@@ -95,7 +95,7 @@ See `CMakePresets.json` for the complete list.
 | Files | PascalCase `.hpp`/`.cpp` | `NetworkAddress.hpp` |
 | Namespaces | lowercase, dot-separated | `mbootcore::transport` |
 
-See [AGENTS.md §6](AGENTS.md#6-coding-standards) for complete coding standards.
+See [AGENTS.md §6](../internal/AGENTS.md#6-coding-standards) for complete coding standards.
 
 ## Running Formatting Checks
 
@@ -177,7 +177,7 @@ New capabilities should be added by implementing existing extension points:
 
 No hardcoded `if (vendor)` branches. Use the plugin system.
 
-See [AGENTS.md](AGENTS.md#14-development-rules) for the extension policy.
+See [AGENTS.md](../internal/AGENTS.md#14-development-rules) for the extension policy.
 
 ## Documentation Expectations
 
@@ -187,7 +187,7 @@ See [AGENTS.md](AGENTS.md#14-development-rules) for the extension policy.
 - **No restating comments:** Do not write comments that restate what the
   code says
 
-See [AGENTS.md §6.7](AGENTS.md#66-documentation) for documentation standards.
+See [AGENTS.md §6.7](../internal/AGENTS.md#66-documentation) for documentation standards.
 
 ## Pull Request Expectations
 
@@ -213,7 +213,7 @@ A change is done when all of the following are satisfied:
 5. Public API changes are documented (Doxygen)
 6. `CMakeLists.txt` is updated if files or dependencies changed
 
-See [AGENTS.md §11](AGENTS.md#11-definition-of-done) for the full checklist.
+See [AGENTS.md §11](../internal/AGENTS.md#11-definition-of-done) for the full checklist.
 
 ### Review Checklist
 
@@ -232,7 +232,7 @@ Every merge request must satisfy:
 11. Test coverage — new code has matching tests
 12. Documentation — Doxygen for public API
 
-See [AGENTS.md §12](AGENTS.md#12-review-checklist) for the complete review
+See [AGENTS.md §12](../internal/AGENTS.md#12-review-checklist) for the complete review
 checklist.
 
 ---

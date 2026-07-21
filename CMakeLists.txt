@@ -218,7 +218,7 @@ install_mbootcore_docs()
 install(FILES
     ${CMAKE_SOURCE_DIR}/LICENSE
     ${CMAKE_SOURCE_DIR}/NOTICE
-    ${CMAKE_SOURCE_DIR}/ThirdPartyLicenses.md
+    ${CMAKE_SOURCE_DIR}/docs/reference/ThirdPartyLicenses.md
     ${CMAKE_SOURCE_DIR}/VERSION
     DESTINATION ${CMAKE_INSTALL_DOCDIR}
 )

@@ -16,7 +16,7 @@ Architecture: Clean Architecture with strict dependency layering. Core library c
 **Security:** Cryptographic operations use the MbedTLS backend by default
 (`MBOOTCORE_ENABLE_CRYPTO=ON`). Set to `OFF` to disable crypto; all
 operations return `NotSupported`.
-See [SECURITY.md](SECURITY.md) and [docs/architecture/Security.md](docs/architecture/Security.md).
+See [SecurityPolicy.md](docs/security/SecurityPolicy.md) and [docs/architecture/Security.md](docs/architecture/Security.md).
 
 ## Quick Start
 
@@ -48,7 +48,7 @@ USB support follows the project's dependency model:
 - **Windows:** WinUSB (built-in, no external dependency)
 - **Linux/macOS:** libusb is auto-downloaded and statically built (no system
   package required)
-- For offline builds, see `OFFLINE_BUILD` in [BUILD_OPTIONS.md](BUILD_OPTIONS.md)
+- For offline builds, see `OFFLINE_BUILD` in [BuildOptions.md](docs/build/BuildOptions.md)
 
 Disable USB entirely with `-DMBOOTCORE_ENABLE_USB=OFF`.
 
