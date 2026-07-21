@@ -37,7 +37,7 @@ The directory reader expects `manifest.json` in the package directory:
 
 ```json
 {
-    "vendor": "QUALCOMM",
+    "vendor": "Qualcomm",
     "platform": "SM8450",
     "chipset": "SM8450",
     "protocol": "sahara",

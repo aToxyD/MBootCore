@@ -5,7 +5,7 @@
 | Compiler | Min Version | Max Version | Status |
 |----------|-------------|-------------|--------|
 | GCC | 11 | Latest | ✅ Tier 1 |
-| Clang | 14 | Latest | ⚠️ Tier 2 |
+| Clang | 15 | Latest | ⚠️ Tier 2 |
 | MSVC | Visual Studio 2022 17.x | 2022 | ⚠️ Tier 3 |
 
 ## Tier 1: GCC
@@ -85,7 +85,7 @@ per compiler and optionally enables warnings-as-errors (`-Werror` / `/WX`).
 | MSVC | `/W4 /permissive-` | `/WX` |
 
 Warnings-as-errors are controlled by `MBOOTCORE_WARNINGS_AS_ERRORS` (see
-[BUILD_OPTIONS.md](../BUILD_OPTIONS.md)). Third-party dependencies are
+[BuildOptions.md](BuildOptions.md)). Third-party dependencies are
 never affected.
 
 ## Feature Detection

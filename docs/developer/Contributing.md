@@ -142,7 +142,7 @@ and conventions.
 
 ## Adding a Protocol
 
-1. Implement `IProtocolPlugin` (see `sdk/include/sdk/IProtocolPlugin.hpp`)
+1. Implement `IProtocolPlugin` (see `lib/include/mbootcore/plugin/IProtocolPlugin.hpp`)
 2. Implement the protocol state machine, packet types, and serializer/parser
 3. Register via the plugin system — no hardcoded branches
 4. Gate scaffold implementations behind `MBOOTCORE_ENABLE_VENDOR_SCAFFOLDS`

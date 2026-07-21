@@ -1,6 +1,6 @@
 # MBoot Studio
 
-Qt6 desktop GUI for MBootCore, a professional low-level C++17 framework for BootROM protocols.
+Qt 6 desktop GUI for MBootCore, a professional low-level C++17 framework for BootROM protocols.
 
 ## Quick Start
 

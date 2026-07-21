@@ -174,7 +174,7 @@ Public API for device session management:
 | Module | Purpose |
 |--------|---------|
 | **Logging** (`logging/`) | ConsoleLogger, FileLogger, NullLogger, StructuredLogger (JSON-line format) |
-| **Security** (`security/`) | SecurityManager, MbedTLS backend (optional), PermissionSet, InMemoryStorage |
+| **Security** (`security/`) | SecurityManager, Mbed TLS backend (optional), PermissionSet, InMemoryStorage |
 | **Config** (`config/`) | ConfigManager with JSON/YAML/INI parsing |
 | **Telemetry** (`telemetry/`) | TelemetryCollector with counter/duration/gauge aggregation |
 | **Diagnostics** (`diagnostics/`) | DiagnosticsManager, DiagnosticCheck (8 built-in health checks), DiagnosticSession, DiagnosticReport |
@@ -199,7 +199,7 @@ The Plugin SDK provides third-party extension points through zero-dependency pub
 | Application | Directory | Description |
 |-------------|-----------|-------------|
 | **mboot-cli** | `apps/mboot-cli/` | Command-line flashing tool with 36 commands, interactive and script modes |
-| **mboot-studio** | `apps/mboot-studio/` | Qt6 desktop GUI with 13 views, 4 themes, Runtime integration |
+| **mboot-studio** | `apps/mboot-studio/` | Qt 6 desktop GUI with 13 views, 4 themes, Runtime integration |
 
 Qt is exclusively a dependency of `apps/mboot-studio/`. The core library (`lib/`) has zero Qt dependencies.
 
@@ -257,7 +257,7 @@ mbootcore_objects (OBJECT)       -- compilation: all sources, defs, includes, wa
        |
 mbootcore (STATIC)               -- assembly + export: zero link dependencies
        |
-POST_BUILD monolithic merge      -- merges zlib, MbedTLS, libusb, SDK into libmbootcore.a
+POST_BUILD monolithic merge      -- merges zlib, Mbed TLS, libusb, SDK into libmbootcore.a
        |
 install(EXPORT MBootCoreTargets) -- CMake-generated targets file (only MBootCore::mbootcore)
 ```
@@ -309,7 +309,7 @@ Test executables covering all layers:
 
 ### Adding a Protocol
 
-1. Implement `IProtocolPlugin` (see `sdk/include/sdk/IProtocolPlugin.hpp`)
+1. Implement `IProtocolPlugin` (see `lib/include/mbootcore/plugin/IProtocolPlugin.hpp`)
 2. Implement the protocol state machine, packet types, and serializer/parser
 3. Register via the plugin system — no hardcoded branches
 4. Gate scaffold implementations behind `MBOOTCORE_ENABLE_VENDOR_SCAFFOLDS`

@@ -58,7 +58,7 @@ cmake .. -DMBOOTCORE_BUILD_STUDIO=ON    # force enable (fails if Qt missing)
 ## Dependencies
 
 **Qt is the only externally installed dependency.** All other third-party
-libraries (nlohmann_json, zlib, MbedTLS, libusb, Catch2) are managed by the
+libraries (nlohmann_json, zlib, Mbed TLS, libusb, Catch2) are managed by the
 built-in dependency manager:
 
 - **First configure:** Archives are downloaded from GitHub, SHA256-verified,
@@ -76,7 +76,7 @@ the full implementation.
 
 ### CMake Options
 
-See [BUILD_OPTIONS.md](../BUILD_OPTIONS.md) for the complete list of
+See [BuildOptions.md](BuildOptions.md) for the complete list of
 CMake options including the `MBOOTCORE_WARNINGS_AS_ERRORS` policy.
 
 

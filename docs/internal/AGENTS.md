@@ -43,7 +43,7 @@ MinGW-w64, GCC, Clang, AppleClang.
 |---------------|----------------------------------------------------|
 | `lib/`        | Core library: interfaces, implementations          |
 | `sdk/`        | Vendor SDK: public headers and source              |
-| `apps/`       | `mboot-cli/` (CLI), `mboot-studio/` (Qt6 GUI)     |
+| `apps/`       | `mboot-cli/` (CLI), `mboot-studio/` (Qt 6 GUI)    |
 | `tests/`      | Unit, integration, fuzz, runtime, GUI tests        |
 | `examples/`   | Runnable example projects                          |
 | `tools/`      | PluginWizard, DocGenerator                         |
@@ -68,7 +68,7 @@ Layered Clean Architecture with clearly defined dependency boundaries:
 | Protocols         | Per-vendor protocol implementations (Sahara, Firehose).    |
 | Transport         | USB, Serial, TCP, UDP backends.                             |
 | Device            | Default device implementation (`IDevice`).                  |
-| Loader            | LoaderManager, ProgrammerLoader.                            |
+| Loader            | LoaderFramework, LoaderManager, ProgrammerLoader.            |
 | ELF               | ElfParser, ElfValidator, MemoryImageBuilder.                |
 | GPT               | Guid, GPTParser, GPTWriter, PartitionManager.               |
 | Discovery         | Vendor/boot-mode enums, DeviceDescriptor, negotiation.      |
@@ -86,7 +86,7 @@ Layered Clean Architecture with clearly defined dependency boundaries:
 | Diagnostics       | DiagnosticsManager, DiagnosticCheck, DiagnosticSession.     |
 | Application       | Session (public API facade).                                |
 | Runtime           | Orchestration layer coordinating services and state.         |
-| GUI               | mboot-studio Qt6 desktop application.                       |
+| GUI               | mboot-studio Qt 6 desktop application.                     |
 
 ### 4.2 Dependency Rules
 
@@ -398,7 +398,7 @@ The predicate must check the condition and the lifetime flag.
 | GPT            | `mbootcore/gpt/`                         | Partition table management        |
 | Diagnostics    | `mbootcore/diagnostics/`                 | Health checks, system report      |
 | CLI            | `apps/mboot-cli/`                        | Command-line flashing tool        |
-| Studio         | `apps/mboot-studio/`                     | Qt6 desktop GUI                   |
+| Studio         | `apps/mboot-studio/`                     | Qt 6 desktop GUI                  |
 
 ---
 
@@ -406,7 +406,7 @@ The predicate must check the condition and the lifetime flag.
 
 ### CMake Presets (Recommended)
 
-Requires CMake 3.23+.  All build scripts and the release workflow use presets internally.
+Requires CMake 3.20+ (3.23+ for presets).  All build scripts and the release workflow use presets internally.
 
 ```bash
 cmake --list-presets                          # list available presets
@@ -539,5 +539,5 @@ Every merge request must satisfy all of the following:
 | NetworkAddress   | Value type in `mbootcore::network` for network endpoints   |
 | Result\<T\>      | Error-or-value return type used in all public APIs         |
 | OBJECT library   | CMake target that compiles sources into `.o` files without producing an archive; owns all compile properties and PRIVATE deps |
-| Monolithic archive | `libmbootcore.a` — single static archive containing MBootCore + all dependency objects (zlib, MbedTLS, libusb, SDK) |
+| Monolithic archive | `libmbootcore.a` — single static archive containing MBootCore + all dependency objects (zlib, Mbed TLS, libusb, SDK) |
 | Export validation | Three hermetic regression gates (Export Integrity, Consumer Package, Install Tree Audit) preventing dependency leaks |

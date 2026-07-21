@@ -90,7 +90,7 @@ The directory structure mirrors the Clean Architecture layer hierarchy: `domain/
 
 ## Monolithic Static Archive Over Separate Libraries
 
-All third-party dependencies (zlib, MbedTLS, libusb, SDK) are merged into `libmbootcore.a` via a `POST_BUILD` archive merge step. Consumers link only `MBootCore::mbootcore` — zero `find_package` calls for internal dependencies.
+All third-party dependencies (zlib, Mbed TLS, libusb, SDK) are merged into `libmbootcore.a` via a `POST_BUILD` archive merge step. Consumers link only `MBootCore::mbootcore` — zero `find_package` calls for internal dependencies.
 
 **Rationale**: MBootCore's dependencies are implementation details. Exposing them to consumers creates unnecessary coupling: consumers must locate the correct version of each dependency, must not accidentally link a different version, and must not see third-party headers in the install tree. A monolithic archive eliminates all three concerns.
 

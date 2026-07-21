@@ -32,7 +32,7 @@ Consumer → IIntegrityVerifier → NotSupportedIntegrityVerifier (default)
 
 `MBOOTCORE_ENABLE_CRYPTO` (default ON):
 
-- **ON**: MbedTLS provider is the primary production implementation.
+- **ON**: Mbed TLS provider is the primary production implementation.
   SHA-256, SHA-512, RSA (2048/4096), and ECDSA (NIST P-256/P-384)
   operations are available. Auto-managed, no host dependencies.
 - **OFF**: All provider implementations return `NotSupported`. No crypto

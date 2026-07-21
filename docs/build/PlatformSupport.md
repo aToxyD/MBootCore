@@ -64,7 +64,7 @@ ctest --output-on-failure -j4
 
 ### Requirements
 
-- GCC 9+ or Clang 14+
+- GCC 11+ or Clang 15+
 - CMake 3.20+
 - libusb 1.0 (for USB transport on Linux)
 - pkg-config

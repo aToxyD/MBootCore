@@ -6,7 +6,7 @@ The security module (`lib/include/mbootcore/security/`) provides:
 
 - **SecurityManager**: Policy management and trusted key storage.
   When `MBOOTCORE_ENABLE_CRYPTO=ON` (default), cryptographic operations
-  are available through the MbedTLS provider interfaces. When explicitly
+  are available through the Mbed TLS provider interfaces. When explicitly
   disabled via `MBOOTCORE_ENABLE_CRYPTO=OFF`, all cryptographic operations
   return `NotSupported`.
 

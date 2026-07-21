@@ -22,10 +22,10 @@ cmake .. -DOPTION=VALUE
 | `CMAKE_INSTALL_PREFIX` | PATH | platform-dependent | Install prefix |
 | `MBOOTCORE_BUILD_TESTS` | BOOL | `ON` | Build unit and integration tests |
 | `MBOOTCORE_BUILD_CLI` | BOOL | `ON` | Build `mboot-cli` command-line tool |
-| `MBOOTCORE_BUILD_STUDIO` | BOOL | `ON` | Build `mboot-studio` Qt GUI (auto-disabled if Qt6 missing) |
+| `MBOOTCORE_BUILD_STUDIO` | BOOL | `ON` | Build `mboot-studio` Qt GUI (auto-disabled if Qt 6 missing) |
 | `MBOOTCORE_BUILD_EXAMPLES` | BOOL | `OFF` | Build example projects |
 | `MBOOTCORE_BUILD_TOOLS` | BOOL | `ON` | Build developer tools (PluginWizard, DocGenerator) |
-| `MBOOTCORE_BUILD_STUDIO_TESTS` | BOOL | `ON` | Build mboot-studio test suite (requires Qt6 Test) |
+| `MBOOTCORE_BUILD_STUDIO_TESTS` | BOOL | `ON` | Build mboot-studio test suite (requires Qt 6 Test) |
 | `MBOOTCORE_OFFLINE_BUILD` | BOOL | `OFF` | Fail if cached dependencies are missing |
 
 ---
@@ -55,7 +55,7 @@ cmake .. -DMBOOTCORE_WARNINGS_AS_ERRORS=OFF
 ```
 
 **Third-party dependencies are never affected** — the policy applies only to
-MBootCore project targets. Qt, MbedTLS, zlib, libusb, nlohmann_json, and
+MBootCore project targets. Qt, Mbed TLS, zlib, libusb, nlohmann_json, and
 Catch2 are compiled without `-Werror`.
 
 **Compiler flags applied:**
