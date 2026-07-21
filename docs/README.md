@@ -34,17 +34,18 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 |----------|-------------|
 | [Sahara Protocol](architecture/Sahara.md) | Sahara binary protocol implementation |
 | [Firehose Protocol](architecture/Firehose.md) | Firehose XML protocol implementation |
-| [Session Engine](architecture/Session.md) | Device session management |
+| [Session](architecture/Session.md) | Device session management |
 | [Boot Pipeline](architecture/BootPipeline.md) | Boot stage orchestration |
 | [Device Discovery](architecture/DeviceDiscovery.md) | Device detection and protocol negotiation |
-| [Generic Flash Framework](architecture/GenericFlash.md) | Protocol-agnostic flash abstraction |
+| [Generic Flash](architecture/GenericFlash.md) | Protocol-agnostic flash abstraction |
 | [Loader Framework](architecture/LoaderFramework.md) | Boot programmer management |
-| [Firmware Package Engine](architecture/FirmwarePackage.md) | Firmware packaging and execution |
+| [Firmware Package](architecture/FirmwarePackage.md) | Firmware packaging and execution |
 | [Plugin System](architecture/PluginSystem.md) | Extension framework |
 | [ELF Engine](architecture/ELF.md) | ELF parsing and validation |
 | [GPT Engine](architecture/GPT.md) | GUID Partition Table management |
 | [Design Decisions](architecture/DesignDecisions.md) | Architectural rationale |
 | [Security Architecture](architecture/Security.md) | Security subsystem design |
+| [Build Pipeline](architecture/BuildPipeline.md) | Build system architecture |
 
 ### Specifications
 
@@ -59,6 +60,7 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | Document | Description |
 |----------|-------------|
 | [Build Guide](build/Build.md) | Build system, CMake options, dependencies |
+| [Build Options](build/BuildOptions.md) | Complete CMake option reference |
 | [Compiler Support](build/CompilerSupport.md) | Toolchain requirements |
 | [Platform Support](build/PlatformSupport.md) | Supported platforms |
 
@@ -67,6 +69,7 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | Document | Description |
 |----------|-------------|
 | [Testing](testing/Testing.md) | Test suite organization |
+| [Security Testing](testing/SecurityTesting.md) | Security test methodology and results |
 | [Hardware Testing](testing/HardwareTesting.md) | Hardware validation infrastructure |
 
 ### User Guide
@@ -81,6 +84,7 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 
 | Document | Description |
 |----------|-------------|
+| [Contributing](developer/Contributing.md) | Contribution guidelines |
 | [Thread Safety](developer/ThreadSafety.md) | Concurrency model |
 
 ### SDK
@@ -89,6 +93,28 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 |----------|-------------|
 | [Plugin Development](sdk/PluginDevelopment.md) | Creating plugins |
 | [SDK API Reference](sdk/Overview.md) | Public API reference |
+
+### GUI (MBoot Studio)
+
+| Document | Description |
+|----------|-------------|
+| [Overview](gui/README.md) | GUI overview and features |
+| [Architecture](gui/Architecture.md) | GUI layer structure |
+| [Components](gui/Components.md) | Widget catalog |
+| [Models](gui/Models.md) | Data models |
+| [Testing](gui/Testing.md) | GUI test methodology |
+| [Theme](gui/Theme.md) | Theme system |
+| [Shortcuts](gui/Shortcuts.md) | Keyboard shortcuts |
+
+### Vendor Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Maturity Model](vendor/MaturityModel.md) | Formal maturity model with four states and exit criteria |
+| [Graduation](vendor/Graduation.md) | Per-vendor graduation checklists |
+| [Hardware Validation](vendor/HardwareValidation.md) | Hardware testing framework |
+| [Golden Vector Policy](vendor/GoldenVectorPolicy.md) | Golden vector creation and maintenance rules |
+| [Scaffold Philosophy](vendor/ScaffoldPhilosophy.md) | Why MediaTek and UNISOC remain Scaffold |
 
 ### Examples
 
@@ -110,26 +136,23 @@ Domain Layer             ─── Interfaces, Types, Error Handling
 | [sdk](../examples/sdk/) | SDK plugin examples (vendor, protocol, workflow, package, discovery) |
 | [dynamic](../examples/dynamic/) | Dynamic plugin loading examples |
 
-### GUI (MBoot Studio)
+### Project
 
 | Document | Description |
 |----------|-------------|
-| [Architecture](gui/Architecture.md) | GUI layer structure |
-| [Components](gui/Components.md) | Widget catalog |
-| [Models](gui/Models.md) | Data models |
-| [Testing](gui/Testing.md) | GUI test methodology |
-| [Theme](gui/Theme.md) | Theme system |
-| [Shortcuts](gui/Shortcuts.md) | Keyboard shortcuts |
+| [Change Log](project/ChangeLog.md) | Release history |
 
-### Vendor Documentation
+### Reference
 
 | Document | Description |
 |----------|-------------|
-| [Vendor Maturity](vendor/MaturityModel.md) | Formal maturity model with four states and exit criteria |
-| [Vendor Graduation](vendor/Graduation.md) | Per-vendor graduation checklists |
-| [Hardware Validation](vendor/HardwareValidation.md) | Hardware testing framework |
-| [Golden Vector Policy](vendor/GoldenVectorPolicy.md) | Golden vector creation and maintenance rules |
-| [Scaffold Philosophy](vendor/ScaffoldPhilosophy.md) | Why MediaTek and UNISOC remain Scaffold |
+| [Third-Party Licenses](reference/ThirdPartyLicenses.md) | Dependency license notices |
+
+### Internal
+
+| Document | Description |
+|----------|-------------|
+| [AGENTS.md](internal/AGENTS.md) | Project constitution, coding standards, review criteria |
 
 ## Recommended Reading Order
 
