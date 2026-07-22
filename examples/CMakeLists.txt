@@ -60,6 +60,10 @@ if(MBOOTCORE_BUILD_EXAMPLES)
             dynamic/${name}/${name}.cpp
         )
         target_link_libraries(${name} PRIVATE mbootcore)
+        # Plugin implementations must export their ABI symbols on Windows.
+        # The plugin ABI header switches between dllexport/dllimport based on
+        # MBOOTCORE_PLUGIN_BUILD.
+        target_compile_definitions(${name} PRIVATE MBOOTCORE_PLUGIN_BUILD)
         target_compile_features(${name} PRIVATE cxx_std_17)
         mbootcore_apply_warnings(${name})
         if(WIN32)
