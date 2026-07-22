@@ -272,30 +272,37 @@ if(EXISTS "${_readme_file}" AND NOT IS_DIRECTORY "${_readme_file}")
     endif()
 
     # ── Phase 3: Insert Installed Components + Start Here ──
-    string(REPLACE
-        "## Architecture Overview"
-        "## Installed Components\n\n"
-        "    include/              Public C++ headers\n"
-        "    lib/                  Libraries\n"
-        "    lib/cmake/MBootCore/  CMake package configuration\n"
-        "    bin/                  Command-line and optional GUI tools\n"
-        "    share/doc/MBootCore/  Documentation (this directory)\n"
-        "\n"
-        "## Start Here\n"
-        "\n"
-        "1. [Installation](getting-started/Installation.md) — platform setup\n"
-        "2. [Quick Start](getting-started/QuickStart.md) — build and run in 5 minutes\n"
-        "3. [CLI Guide](user-guide/CLI.md) — command-line tool usage\n"
-        "4. [Configuration](user-guide/Configuration.md) — configuration system\n"
-        "5. [Architecture Overview](architecture/Overview.md) — understand the system\n"
-        "6. [SDK Overview](sdk/Overview.md) — public API reference\n"
-        "7. [Plugin Development](sdk/PluginDevelopment.md) — extending MBootCore\n"
-        "\n"
-        "## Architecture Overview"
-        _result "${_result}")
+    # Build replacement as a single variable to comply with string(REPLACE)
+    # API contract: <replace> is exactly one argument.
+    set(_installed_components_section "")
+    string(APPEND _installed_components_section "## Installed Components\n\n")
+    string(APPEND _installed_components_section "    include/              Public C++ headers\n")
+    string(APPEND _installed_components_section "    lib/                  Libraries\n")
+    string(APPEND _installed_components_section "    lib/cmake/MBootCore/  CMake package configuration\n")
+    string(APPEND _installed_components_section "    bin/                  Command-line and optional GUI tools\n")
+    string(APPEND _installed_components_section "    share/doc/MBootCore/  Documentation (this directory)\n")
+    string(APPEND _installed_components_section "\n## Start Here\n\n")
+    string(APPEND _installed_components_section "1. [Installation](getting-started/Installation.md) — platform setup\n")
+    string(APPEND _installed_components_section "2. [Quick Start](getting-started/QuickStart.md) — build and run in 5 minutes\n")
+    string(APPEND _installed_components_section "3. [CLI Guide](user-guide/CLI.md) — command-line tool usage\n")
+    string(APPEND _installed_components_section "4. [Configuration](user-guide/Configuration.md) — configuration system\n")
+    string(APPEND _installed_components_section "5. [Architecture Overview](architecture/Overview.md) — understand the system\n")
+    string(APPEND _installed_components_section "6. [SDK Overview](sdk/Overview.md) — public API reference\n")
+    string(APPEND _installed_components_section "7. [Plugin Development](sdk/PluginDevelopment.md) — extending MBootCore\n")
+    string(APPEND _installed_components_section "\n## Architecture Overview")
+
+    string(REPLACE "## Architecture Overview" "${_installed_components_section}" _result "${_result}")
     if(NOT _result MATCHES "## Installed Components")
         message(FATAL_ERROR
             "SDKStaging: Phase 3 failed — Installed Components not inserted.")
+    endif()
+    if(NOT _result MATCHES "## Start Here")
+        message(FATAL_ERROR
+            "SDKStaging: Phase 3 failed — Start Here section not inserted.")
+    endif()
+    if(NOT _result MATCHES "## Installed Components.*## Architecture Overview")
+        message(FATAL_ERROR
+            "SDKStaging: Phase 3 failed — section insertion incomplete.")
     endif()
 
     # ── Phase 5: Append Source Repository ──
