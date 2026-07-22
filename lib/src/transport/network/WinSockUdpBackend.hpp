@@ -5,6 +5,7 @@
 #ifdef _WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#include "platform/WinSockRuntime.hpp"
 #endif
 
 namespace mbootcore {
@@ -37,8 +38,9 @@ public:
     void setLogger(ILogger* logger) noexcept override { m_logger = logger; }
 
 private:
+    platform::WinSockRuntime m_runtime;
+    ILogger* m_logger{nullptr};
     SOCKET m_sock{INVALID_SOCKET};
-    ILogger* m_logger;
 };
 #endif // _WIN32
 

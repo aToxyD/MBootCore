@@ -40,16 +40,14 @@ WinSockUdpBackend::~WinSockUdpBackend() {
 }
 
 bool WinSockUdpBackend::isAvailable() const noexcept {
-    platform::WinSockRuntime ws;
-    return ws.isInitialized();
+    return m_runtime.isInitialized();
 }
 
 Result<void> WinSockUdpBackend::open(const std::string& localAddress, uint16_t localPort,
                                       const std::string& remoteAddress, uint16_t remotePort,
                                       std::chrono::milliseconds timeout,
                                       bool broadcast) {
-    platform::WinSockRuntime ws;
-    if (!ws.isInitialized()) {
+    if (!m_runtime.isInitialized()) {
         if (m_logger) m_logger->error("WinSockUdpBackend", "WSAStartup failed");
         return ErrorCode::TransportBackendUnavailable;
     }

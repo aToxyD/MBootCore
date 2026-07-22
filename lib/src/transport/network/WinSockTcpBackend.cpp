@@ -46,15 +46,13 @@ WinSockTcpBackend::~WinSockTcpBackend() {
 }
 
 bool WinSockTcpBackend::isAvailable() const noexcept {
-    platform::WinSockRuntime ws;
-    return ws.isInitialized();
+    return m_runtime.isInitialized();
 }
 
 Result<void> WinSockTcpBackend::open(const std::string& host, uint16_t port,
                                       bool keepAlive,
                                       std::chrono::milliseconds timeout) {
-    platform::WinSockRuntime ws;
-    if (!ws.isInitialized()) {
+    if (!m_runtime.isInitialized()) {
         if (m_logger) m_logger->error("WinSockTcpBackend", "WSAStartup failed");
         return ErrorCode::TransportBackendUnavailable;
     }
