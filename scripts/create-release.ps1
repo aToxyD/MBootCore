@@ -110,12 +110,19 @@ try {
     Step "CMake Configure"
 
     $BuildPath = Join-Path $ProjectRoot $BuildDir
+    if (-not (Test-Path (Join-Path $ProjectRoot "CMakeLists.txt"))) {
+        Fail "Project root does not contain CMakeLists.txt: $ProjectRoot"
+    }
     if (-not (Test-Path $BuildPath)) { New-Item -ItemType Directory $BuildPath | Out-Null }
+
+    Ok "Source: $ProjectRoot"
+    Ok "Build : $BuildPath"
 
     Push-Location $BuildPath
     try {
         $cmakeArgs = @(
-            "..",
+            "-S", $ProjectRoot,
+            "-B", $BuildPath,
             "-G", "MinGW Makefiles",
             "-DCMAKE_BUILD_TYPE=Release",
             "-DMBOOTCORE_BUILD_TESTS=ON",
