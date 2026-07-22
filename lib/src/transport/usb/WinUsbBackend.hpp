@@ -60,6 +60,9 @@ private:
     std::unique_ptr<platform::DynamicLibrary> m_lib;
 
     ILogger* m_logger{nullptr};
+    // Cached platform capability determined during construction.
+    // Does NOT indicate that a USB device is connected or opened.
+    bool m_winUsbAvailable{false};
     std::mutex m_mutex;
 
     void* m_deviceHandle{nullptr};

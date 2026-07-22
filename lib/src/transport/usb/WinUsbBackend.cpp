@@ -54,7 +54,7 @@ struct WinUsbBackend::WinUsbFunctions {
 WinUsbBackend::WinUsbBackend(ILogger* logger)
     : m_logger(logger) {
     m_wusb = std::make_unique<WinUsbFunctions>();
-    isWinUsbAvailable();
+    m_winUsbAvailable = isWinUsbAvailable();
 }
 
 WinUsbBackend::~WinUsbBackend() {
@@ -67,7 +67,7 @@ bool WinUsbBackend::isWinUsbAvailable() {
 }
 
 bool WinUsbBackend::isAvailable() const noexcept {
-    return m_lib && m_lib->isLoaded();
+    return m_winUsbAvailable;
 }
 
 std::string WinUsbBackend::findDevicePath(uint16_t vendorId, uint16_t productId, int interfaceNumber) {
