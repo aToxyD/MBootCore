@@ -59,7 +59,7 @@ public:
 
     Result<ByteBuffer> readMemory(uint64_t address, size_t size) override {
         if (m_corrupt) return Result<ByteBuffer>::Error(ErrorCode::TransportError);
-        if (address + size > m_storage.size())
+        if (!isRangeValid(address, size))
             return Result<ByteBuffer>::Error(ErrorCode::InvalidArgument);
         ByteBuffer buf(m_storage.begin() + static_cast<ptrdiff_t>(address),
                        m_storage.begin() + static_cast<ptrdiff_t>(address + size));
@@ -68,7 +68,7 @@ public:
 
     Result<void> writeMemory(uint64_t address, const ByteBuffer& data) override {
         if (m_corrupt) return Result<void>::Error(ErrorCode::TransportError);
-        if (address + data.size() > m_storage.size())
+        if (!isRangeValid(address, data.size()))
             return Result<void>::Error(ErrorCode::InvalidArgument);
         std::copy(data.begin(), data.end(),
                   m_storage.begin() + static_cast<ptrdiff_t>(address));
@@ -77,7 +77,7 @@ public:
 
     Result<void> eraseMemory(uint64_t address, size_t size) override {
         if (m_corrupt) return Result<void>::Error(ErrorCode::TransportError);
-        if (address + size > m_storage.size())
+        if (!isRangeValid(address, size))
             return Result<void>::Error(ErrorCode::InvalidArgument);
         std::fill(m_storage.begin() + static_cast<ptrdiff_t>(address),
                   m_storage.begin() + static_cast<ptrdiff_t>(address + size), 0);
@@ -106,6 +106,12 @@ public:
     void setProgressCallback(ProgressCallback) override {}
 
 private:
+    bool isRangeValid(uint64_t address, size_t size) const {
+        if (address > m_storage.size()) return false;
+        if (size > m_storage.size() - address) return false;
+        return true;
+    }
+
     ByteBuffer m_storage;
     uint64_t m_numSectors;
     uint32_t m_sectorSize;
