@@ -4,6 +4,15 @@
 
 All MBootCore tests pass with zero failures. Tests use virtual devices and mocks — no physical hardware is required.
 
+## Test Summary
+
+MBootCore provides automated test suites covering:
+
+- Product functionality and protocol correctness
+- Environment and backend validation
+- SDK tooling and API compatibility
+- Hardware validation (executed only when compatible physical devices are available)
+
 ## Test Executables
 
 ### Protocol Tests
@@ -86,7 +95,7 @@ All MBootCore tests pass with zero failures. Tests use virtual devices and mocks
 
 Covering all 15 widget categories: framework, discovery, session, firmware, flash, GPT, workflow, job, plugin, vendor, transport, logs, settings, diagnostics, devtools, theme, l10n, integration.
 
-### SDK Tests (17 tests)
+### SDK Tests (16 tests)
 
 Covering Plugin SDK, Vendor SDK, templates, compatibility, diagnostics.
 
